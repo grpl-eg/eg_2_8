@@ -1,0 +1,40 @@
+[%- 
+    USE CGI = CGI_utf8;
+    hostname = CGI.url({'-base' => 1});
+-%]
+
+
+<div id=extra_links align=center>
+	<a href='/eg/opac/myopac/purchase_request_form' >Suggest a Title</a>
+	<span> | </span>
+        <a href='http://lakenet.llcoop.org/' target='_blank' >Search LakeNet</a>
+        <span> | </span>
+        <a href='http://elibrary.mel.org/search' target='_blank' >Search MeLCat</a>
+	<span> | </span>
+        <a href='http://grplpedia.grpl.org/wiki/index.php/Evergreen_tutorial' target='_blank'>Catalog Help</a>
+</div>
+[%- IF NOT ctx.is_staff %]
+[% INCLUDE 'opac/parts/grpl_branches.tt2' %]
+
+</div>
+</div>
+<div id="footer-out">
+		
+		
+		<div id="footer" style="margin: auto;" class="col-full">
+			
+			<div id="copyright" class="col-left">
+							<p><span>Grand Rapids Public Library</span> <br>Copyright &copy; 2014. All Rights Reserved.</p>
+						</div>
+			
+			<div id="credit" class="col-right">
+	        				<p>Powered by <a href="http://www.evergreen-ils.org">Evergreen</a> </p>
+						</div>
+			
+		</div><!-- /#footer  -->
+	
+	</div><!-- /#footer-out  -->
+
+</div>
+</div>
+[% END %]

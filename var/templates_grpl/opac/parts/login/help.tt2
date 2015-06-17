@@ -1,0 +1,11 @@
+<div class="login-help-box">
+
+    <div class="login-help-button">
+        <a href="http://www.grpl.org/about/contact-us/" class="opac-button" target=_blank>[% l('Questions?') %]</a>
+    </div>
+
+    <div>
+        [% l('Visit our FAQs section for answers to common questions about how to use your account.') %]
+    </div>
+
+</div>

@@ -1,0 +1,6 @@
+@charset "UTF-8";
+/* CSS Document */
+
+li.collapsible-item:after {
+	content: '(Collapsible)';
+}

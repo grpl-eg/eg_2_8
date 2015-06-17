@@ -1,0 +1,262 @@
+[%-
+
+# If being used in serial mode, flatten list of units so that they can be
+# used like one long list of copies without changing so much code below.
+IF serial_holdings;
+    copies = [];
+    FOREACH h IN serial_holdings;
+        units = h.units.slice(0); # copy
+        FOREACH unit IN units;
+            unit.holding_label = h.label;
+        END;
+        copies = copies.merge(units);
+    END;
+END;
+
+FOREACH copy_info IN copies;
+    IF copy_info.call_number_label != '##URI##';
+        has_copies = 'true';
+    END;
+    IF copy_info.part_label != '';
+        has_parts = 'true';
+    END;
+    IF has_parts && has_copies;
+        LAST;
+    END;
+END;
+-%]
+[%- IF has_copies; %]
+<table class="table_no_border_space table_no_cell_pad table_no_border" width="100%" id="rdetails_status">
+    <thead>
+        <tr>
+            [% IF serial_holdings -%]
+            <th id='copy_header_holding_label'>[% l("Issue Label") %]</th>
+            [%- ELSE -%]
+            <th id='copy_header_library'>[% l("Location") %]</th>
+            [%- END %]
+            <th id='copy_header_callnumber'>[% l("Call Number / Copy Notes") %]</th>
+            [%- IF has_parts == 'true' %]
+            <th id='copy_header_part'>[% l("Part") %]</th>
+            [%- END %]
+            <th id='copy_header_barcode'>[% l("Barcode") %]</th>
+            <th id='copy_header_shelfloc'>[% l("Shelving Location") %]</th>
+            [%- IF ctx.is_staff %]
+            <th id='copy_header_create_date'>[% l("Create Date") %]</th>
+            [%- END %]
+            [%- IF ctx.is_staff OR serial_holdings %]
+            <th id='copy_header_holdable'>[% l("Holdable?") %]</th>
+            [%- END %]
+            <th id='copy_header_status'>[% l("Status") %]</th>
+            <th id='copy_header_due_date'>[% l("Due Date") %]</th>
+        </tr>
+    </thead>
+    <tbody class="copy_details_table">
+[%- FOREACH peer IN ctx.foreign_copies;
+        FOREACH bib IN peer.foreign_copy_maps; %]
+    <tr class="copy_details_row"><td headers='copy_header_shelfloc'>
+    [%- bib_lib_name = ctx.get_aou(bib.target_copy.circ_lib).name | html;
+        l("[_1] (foreign item)", bib_lib_name); -%]
+        <ul><li>
+            <span class="bib_peer_type">[% bib.peer_type.name | html %]</span>:
+            <a href="[% mkurl(ctx.opac_root _ '/record/' _ bib.target_copy.call_number.record) %]">
+                <span class="bib_peer_title">[% peer.title | html %]</span> / 
+                <span class="bib_peer_author">[% peer.author | html %]</span>
+            </a>
+        </li></ul>
+    </td>
+    <td headers='copy_header_callnumber'>[% bib.target_copy.call_number.label | html %]</td>
+    <td headers='copy_header_barcode'>[% bib.target_copy.barcode | html %]</td>
+    <td headers='copy_header_shelfloc'>[% copy_info.copy_location | html %]</td>
+    <td headers='copy_header_status'>[% copy_info.copy_status | html %]</td>
+    <td headers='copy_header_due_date'>[% copy_info.due_date | html %]</td>
+</tr>
+
+   [%- END; # FOREACH peer
+END; # FOREACH bib
+-%]
+        [%- last_cn = 0;
+        FOR copy_info IN copies;
+            callnum = copy_info.call_number_label;
+            NEXT IF callnum == '##URI##';
+
+            callnum_prefix = copy_info.call_number_prefix_label;
+            IF callnum_prefix != "";
+                callnum = callnum_prefix _ " " _ callnum;
+            END;
+
+            callnum_suffix = copy_info.call_number_suffix_label;
+            IF callnum_suffix != "";
+                callnum = callnum  _ " " _ callnum_suffix;
+            END;
+        -%]
+[% allVolHold = 0 %]
+[% PERL %]
+    my $call = $stash->get('callnum');
+    if (($call =~ /\d\sof\s\d/) || ($call =~ /\sv\.\d+(\s|$)/) ){
+       $stash->set('allVolHold',1);
+    }
+[% END %]
+
+        <tr class="copy_details_offers_row" property="offers" typeof="Offer">
+            [%- IF serial_holdings %]<td headers='copy_header_holding_label' class='rdetail-issue-issue'>
+                [%- copy_info.holding_label | html; -%]
+            </td>
+            [%- ELSE %]<td headers='copy_header_library'>
+            [%- INCLUDE "opac/parts/library_name_link.tt2"; -%]
+                <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
+                <link property="itemOffered" href="#schemarecord">
+            </td>[% END %]
+            <td headers='copy_header_callnumber'><span property="sku">[% callnum | html %]</span> [% IF ctx.get_org_setting(CGI.param('loc') OR ctx.aou_tree.id, 'sms.enable') == 1 %](<a href="[% mkurl(ctx.opac_root _ '/sms_cn', {copy_id => copy_info.id}) %]">Text</a>)[% END %]
+            [% IF allVolHold AND !ctx.is_staff %]
+                <a href="[% mkurl(ctx.opac_root _ '/place_hold',
+                    {hold_target => copy_info.call_number, hold_type => 'V', hold_source_page => mkurl()}) %]">[% l("(Place hold)") %]</a>
+            [% END %]
+	    </td>
+            [%- IF has_parts == 'true' %]
+            <td headers='copy_header_part'>[% copy_info.part_label | html %]</td>
+            [%- END %]
+            <td headers='copy_header_barcode' property="serialNumber">
+                [%- IF ctx.is_staff -%]
+                    <a href="javascript:void(0)" onclick="xulG.new_tab(xulG.urls.XUL_COPY_STATUS, {}, {'from_item_details_new': true, 'barcodes': ['[%- copy_info.barcode | html | replace('\'', '\\\'') -%]']})">[% copy_info.barcode | html %]</a>
+                [%- ELSE -%][% copy_info.barcode | html %]
+                [%- END -%]
+                [%- IF attrs.gtin13;
+                    '<meta property="gtin13" content="' _ attrs.gtin13 _ '" />';
+                END; -%]
+            </td>
+            <td headers='copy_header_shelfloc' property="availableAtOrFrom">[% copy_info.copy_location | html %]</td>
+            [%- IF ctx.is_staff %]
+            <td headers='copy_header_date_format'>[% date.format(
+                ctx.parse_datetime(copy_info.create_date),
+                DATE_FORMAT
+            ) %]</td>
+            [% END # is_staff %]
+            [% IF ctx.is_staff OR serial_holdings %]
+            <td headers='copy_header_holdable'>[%  # Show copy/volume hold links to staff (without
+                # checking whether they have permissions to do those).
+                overall_holdable = (
+                    copy_info.holdable == 't' AND
+                    copy_info.location_holdable == 't' AND
+                    copy_info.status_holdable == 't'
+                );
+                IF overall_holdable;
+                    hold_link = '';
+                    param_sep = l(" / ");
+
+                    # Only staff get to place copy or volume holds
+                    IF ctx.is_staff; 
+                        hold_link = '<a href="' _
+                            mkurl(ctx.opac_root _ '/place_hold', {
+                                hold_target => copy_info.id,
+                                hold_type => 'C',
+                                hold_source_page => mkurl()
+                            }) _ '">' _ l('Copy hold') _ '</a>';
+                        IF copy_info.call_number != last_cn;
+                            last_cn = copy_info.call_number; 
+                            hold_link = hold_link _ param_sep;
+                            hold_link = hold_link _ '<a href="' _
+                                mkurl(ctx.opac_root _ '/place_hold', {
+                                    hold_target => copy_info.call_number,
+                                    hold_type => 'V',
+                                    hold_source_page => mkurl()
+                                }) _ '">' _ l('Volume hold') _ '</a>';
+                        END;
+                        IF serial_holdings;
+                            hold_link = hold_link _ param_sep;
+                        END;
+                    END; 
+                    IF serial_holdings; 
+                        hold_link = hold_link _
+                            '<a class="rdetail-issue-place-hold" href="' _
+                            mkurl(ctx.opac_root _ '/place_hold', {
+                                hold_target => copy_info.issuance,
+                                hold_type => 'I',
+                                hold_source_page => mkurl()
+                            }) _ '">' _ l('Issue hold') _ '</a>';
+                    END; 
+
+                    hold_link;
+                ELSE; 
+                    l("Not holdable");
+                END %]</td>
+            [%- END %]
+            <td headers='copy_header_status'>[%-
+                schema_copy_status.${copy_info.status_code};
+                copy_info.copy_status | html;
+            -%]</td>
+            <td headers='copy_header_due_date'>[%
+                IF copy_info.due_date;
+                    date.format(
+                        ctx.parse_datetime(copy_info.due_date),
+                        DATE_FORMAT
+                    );
+                ELSE;
+                    '-';
+                END %]</td>
+        </tr>
+
+        [% IF copy_info.notes; %]
+            [% FOREACH note IN copy_info.notes; %]
+                <tr><td>&nbsp;</td><td class="copy_note" colspan="4" property="description"><strong>[% note.title | html %]:</strong> [% note.value | html %]</td></tr>
+            [% END %]
+        [% END %]
+
+<tr><td headers='copy_header_shelfloc'>
+[%- IF copy_info.peer_bib_marc.size > 1;
+'<ul>';
+    FOREACH bib IN copy_info.peer_bib_marc;
+        attrs = {marc_xml => bib};
+        PROCESS get_marc_attrs args=attrs %]
+[%- IF attrs.bibid != ctx.bre_id; -%]
+    <li property="isRelatedTo" typeof="Product">
+        [%- # Map the bound-with relationship -%]
+        <a href="[% mkurl(ctx.opac_root _ '/record/' _ attrs.bibid) %]" property="url">
+            <span class="bib_peer_title" property="name">[% attrs.title | html %]</span>
+            / <span class="bib_peer_author">[% attrs.author | html %]</span>
+        </a>
+    </li>
+[%- END; # IF attrs.bibid %]
+[%- END; # FOREACH bib in copy_info.peer_bib_marc
+'</ul>';
+    END # IF copy_info.peer_bib_marc.size
+%]
+</td></tr>
+[%- END; # FOR copy_info
+%]
+        <tr>
+        [%- IF ctx.copy_offset > 0 AND NOT serial_holdings;
+            new_offset = ctx.copy_offset - ctx.copy_limit;
+            IF new_offset < 0; new_offset = 0; END %]
+            <td>
+                <a href="[% mkurl('', {copy_offset => new_offset, copy_limit => ctx.copy_limit}) %]">&laquo; [%
+                    l('Previous [_1]', ctx.copy_offset - new_offset) %]</a>
+            </td>
+        [%- END %]
+        [%- IF copies.size >= ctx.copy_limit AND NOT serial_holdings %]
+            <td>
+                <a href="[% mkurl('', {copy_offset => ctx.copy_offset + ctx.copy_limit, copy_limit => ctx.copy_limit}) %]">[%
+                    l('Next [_1]', ctx.copy_limit) %] &raquo;</a>
+            </td>
+        [%- END %]
+        </tr>
+        [% IF NOT serial_holdings -%]
+        <tr>
+            <td>
+                [%- more_copies_limit = 50 %] [%# TODO: config %]
+                [%- IF  ctx.copy_limit != more_copies_limit AND copies.size >= ctx.copy_limit %]
+                    <div class="rdetail_show_copies">
+                        <img src="[% ctx.media_prefix %]/images/plus_sign.png" alt="[% l('Show more copies icon') %]"/>
+                        <a href="[% mkurl('', {copy_limit => more_copies_limit, copy_offset => 0}) %]">[% l('Show more copies') %]</a>
+                    </div>
+                [%- ELSIF ctx.copy_limit == more_copies_limit %]
+                    <div  class="rdetail_show_copies">
+                        <img src="[% ctx.media_prefix %]/images/minus_sign.png" alt="[% l('Show fewer copies icon') %]"/>
+                        <a href="[% mkurl('', {copy_limit => 0, copy_offset => 0}) %]">[% l('Show fewer copies') %]</a>
+                    </div>
+                [%- END %]
+            </td>
+        </tr>
+        [%- END %]
+    </tbody>
+</table>
+[% END; %]

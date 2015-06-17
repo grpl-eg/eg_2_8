@@ -1,0 +1,691 @@
+[%  PROCESS "opac/parts/header.tt2";
+    PROCESS "opac/parts/misc_util.tt2";
+    WRAPPER "opac/parts/myopac/base.tt2";
+    myopac_page = "src_form";
+%]
+
+<link rel="stylesheet" type="text/css" href="/src/srcstyle.css" />
+
+<script type="text/javascript" src="[% ctx.media_prefix %]/js/dojo/dojo/dojo.js"></script>
+
+<script type="text/javascript">
+   dojo.require("dojo.parser");
+   dojo.require("dijit.form.Form");
+</script>
+
+<div id='myopac_request_div'>
+
+    <div id="acct_request_tabs">
+        <div class="align">
+            <a href='[% mkurl("src") %]'>[% l("Welcome") %]</a>
+        </div>
+        <div class="align">
+            <a href='[% mkurl("src_readers") %]'>[% l("Manage Readers") %]</a>
+        </div> 
+        <div class="align selected">
+            <a href='#'>[% l("Hero's Quest") %]</a>
+	</div>
+    </div>
+	<div>
+
+<!--       	   <iframe src=/src width=700 height=700></iframe> -->
+<script type="text/javascript" src=/src/src.js></script>
+<link rel="stylesheet" href="/src/srcstyle.css" type="text/css">
+
+<div id=src_container>
+
+   <div id=registerBox>
+	   <div id=controls>
+		<span id=header1 onClick=changeTab(1); style='opacity:.3';>Hero's Quest</span>
+		<span id=header2 onClick=changeTab(2);>Badges</span>
+		<span id=header3 onClick=changeTab(3);>My Team</span>
+	   </div> <!--controls -->
+
+	   <div id=choices>
+   
+           <div id=tab1>
+                <p>
+		Welcome to the Hero's Quest Summer Reading Challenge. Pick one of four superheroes to join the Animal Alliance. You'll complete a series of challenges to give your team the super powers they need to compete against their opponents.
+		<p>
+<br><br>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"
+      id="docs-internal-guid-b9e32639-00c8-a745-d880-0ca608542e3f"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:bold;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Brief
+        Background Story: </span><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">The
+        Animal Alliance is here and they need your help. The Wind
+        Warriors, Team Terra, Fiery Force, and Splash Squad are trying
+        to level up their elemental super powers to defeat the Evil
+        Overlord and his brainless minions who are trying to take over
+        the Grand Rapids Public Library. You can save the day! </span></p>
+    <br>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Heres
+        how to play: </span></p>
+    <ol style="margin-top:0pt;margin-bottom:0pt;">
+      <li dir="ltr"
+style="list-style-type:decimal;font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">
+        <p dir="ltr"
+          style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Read
+             a challenge. There are 20 badges to collect and five levels
+            of each element (air, water, earth, and fire). Every level
+            increases in difficulty.  Look at the tip section if you get
+            stuck searching! Dont forget to ask your librarian for help
+            if you can't figure out a question!  </span></p>
+      </li>
+    </ol>
+    <br>
+    <ol style="margin-top:0pt;margin-bottom:0pt;" start="2">
+      <li dir="ltr"
+style="list-style-type:decimal;font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">
+        <p dir="ltr"
+          style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Unlock
+            badges in the library catalog by solving which search terms
+            to use. </span><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:italic;font-variant:normal;text-decoration:none;vertical-align:baseline;">[insert
+            game screen shot]</span></p>
+      </li>
+    </ol>
+    <br>
+    <ol style="margin-top:0pt;margin-bottom:0pt;" start="3">
+      <li dir="ltr"
+style="list-style-type:decimal;font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">
+        <p dir="ltr"
+          style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Once
+            youve typed in the correct search term, a badge will pop up
+            next to the correct item in the catalog. If you do not see a
+            badge, keep searching! </span><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:italic;font-variant:normal;text-decoration:none;vertical-align:baseline;">[insert
+            game screen shot]</span></p>
+      </li>
+    </ol>
+    <br>
+    <ol style="margin-top:0pt;margin-bottom:0pt;" start="4">
+      <li dir="ltr"
+style="list-style-type:decimal;font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">
+        <p dir="ltr"
+          style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">When
+            you unlock all the badges, visit a librarian at your local
+            Animal Alliance Headquarters (GRPL branch) to pick up a
+            prize. Prizes will start being released July 15.</span></p>
+      </li>
+    </ol>
+    <br>
+    <ol style="margin-top:0pt;margin-bottom:0pt;" start="5">
+      <li dir="ltr"
+style="list-style-type:decimal;font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">
+        <p dir="ltr"
+          style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Look
+            for announcement over the summer of a top secret team
+            meeting. </span></p>
+      </li>
+    </ol>
+    <br>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">
+         Further searching tips for the Heroes Quest: </span></p>
+    <br>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">   
+      </span><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Level
+        1: Use our â€˜search catalog keyword search to help find the
+        answer. </span></p>
+    <br>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">   
+      </span><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Level
+        2: Try changing search from keyword to author, subject, series,
+        or title. </span></p>
+    <br>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">   
+      </span><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Level
+        3: Try changing the format box to Audio Books, DVD, Music, etc.
+      </span></p>
+    <br>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;text-indent:
+      36pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Level
+        4: Use the advanced keyword search to find what is available at
+        different library </span></p>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;margin-left:
+      36pt;text-indent: 36pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">
+         locations. </span></p>
+    <br>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">   
+      </span><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Level
+        5: Visit </span><a href="http://www.grpl.org/schools"
+        style="text-decoration:none;"><span
+style="font-size:15px;font-family:Arial;color:#1155cc;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:underline;vertical-align:baseline;">www.grpl.org/schools</span></a><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">
+        to discover databases. </span></p>
+    <br>
+    <br>
+    <div dir="ltr" style="margin-left:0pt;">
+      <table style="border:none;border-collapse:collapse">
+        <colgroup><col width="77"><col width="264"><col width="283"></colgroup><tbody>
+          <tr style="height:0px">
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px"><br>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:bold;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Air</span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:bold;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Earth</span></p>
+            </td>
+          </tr>
+          <tr style="height:0px">
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:bold;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Level
+                  1</span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">The
+                  Storm of Thunder is on the loose and wreaking havoc by
+                  raining on anyone who checks out a library book. Help
+                  the Wind Warriors defeat the storm ogre by learning
+                  the secrets to Zeuss power. Search for the title of
+                  the book about a half-god who is sent to a camp and
+                  defeats mythical beasts. </span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Team
+                  Terra is trying to work on their earth attacks by
+                  creating elemental creatures . Help build your teams
+                  powers by finding this book that gives you step by
+                  step instructions on how to draw monsters.</span></p>
+            </td>
+          </tr>
+          <tr style="height:0px">
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:bold;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Level
+                  2</span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Work
+                  on building your levitating powers. Read a book about
+                  clouds for 15 minutes. When youre done [insert
+                  subject hint] for a book on clouds and unlock this
+                  badge. </span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">The
+                  book mice need your help! Double Agent Bizarre Cat has
+                  captured all of librarys books on mice and will soon
+                  use the pages to make fish art. Read a fiction or
+                  nonfiction book about mice. After youve finished
+                  reading your book, find a book in the catalog about
+                  mice,  youll then be able to unlock this badge.</span></p>
+            </td>
+          </tr>
+          <tr style="height:103px">
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:bold;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Level
+                  3</span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">The
+                  cowardly carpenter has stolen a Norse Gods famous
+                  LARGE hammer. Look up his life storys DVD, and help
+                   your team learn more about his superhero origin
+                  story.   </span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">As
+                  herbivores, your team chows down on a lot of
+                  blueberries. Unfortunately, the Prankster Lynx has
+                  switched the blueberries with nightshade and now
+                  everyone is sick! Find the 1967 children's movie about
+                  a doctor who can understand what animals are saying. </span></p>
+            </td>
+          </tr>
+          <tr style="height:0px">
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:bold;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Level
+                  4</span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Oh
+                  no! A book has disappeared from a certain library. The
+                  Terrible Wraith has decided to bring creatures in this
+                  book to life. Assemble your team and search for a book
+                  about the radio play in 1938 that people thought was
+                  really happening.</span></p>
+              <br>
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Hint:
+                  This title is only available at the West Leonard
+                  Branch</span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Visit
+                  a librarian at your local Animal Alliance Headquarters
+                  (GRPL branch) and tell them about the books you are
+                  reading. They will give you a special Team Terra code
+                  to unlock this badge!  </span></p>
+            </td>
+          </tr>
+          <tr style="height:31px">
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:bold;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Level
+                  5</span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Uh-oh.
+                  The Terrible Wraith is up to no good. After foiling
+                  his last plot, the Wraith has decided to strike back
+                  at the Wind Warriors once and for all!  The Terrible
+                  Wraith has released a specific type of pollution into
+                  the air. Visit the database Gale Science in Context to
+                  find an article on this type of pollutionï¼but thats
+                  not all. Search for the author of the article to gain
+                  the ULTIMATE SUPERPOWER. </span></p>
+              <br>
+              <br>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">The
+                  Animal Alliance wants to vacation in  Brazil. What's
+                  the weather like there, and more importantly, where
+                  are the â€œhuge rainforests in Brazil?â€ Use CultureGrams
+                  to find out!  Locate the map in CultureGrams to find
+                  the Land and Climate page for Brazil. Once youve find
+                  where the â€œhuge rainforestsâ€ are located in Brazil,
+                  type the answer in the keyword search in the card
+                  catalog. </span></p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div dir="ltr" style="margin-left:0pt;">
+      <table style="border:none;border-collapse:collapse">
+        <colgroup><col width="77"><col width="264"><col width="283"></colgroup><tbody>
+          <tr style="height:0px">
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px"><br>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:bold;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Fire</span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:bold;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Water</span></p>
+            </td>
+          </tr>
+          <tr style="height:0px">
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:bold;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Level
+                  1</span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">This
+                  famous bespectacled wizard's name was put into a fiery
+                  cup. Help the Fiery Force level up their superpower by
+                  discovering which book of seven tells this tale?</span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">The
+                  Squid Shaper has decided to grant the Splash Squad
+                  their wish for a sidekick fish. Help the Splash Squad
+                  find a book with a simple introduction to pet fish and
+                  their basic needs.</span></p>
+              <br>
+            </td>
+          </tr>
+          <tr style="height:0px">
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:bold;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Level
+                  2</span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Fiery
+                  Force has been stumped by the Super Smelly Whiz. In
+                  order to increase their superpower they need your help
+                  in solving this riddle: What monstrous character is
+                  being spoken of: "Bellowing fog, I'm the size of the
+                  red dog, The little people run from me yelling ????â€
+                  When you figure out this riddle, search the library
+                  catalog for the author of this book to unlock this
+                  badge. </span></p>
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;"><br
+                    class="kix-line-break">
+                </span><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Hint:
+                  There will be dragons </span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Surge,
+                  the crusty crustacean, is trying to create a squall to
+                  wipe out sharks in the Central Pacific Islands. Add a
+                  book on tiger sharks to stop Surges evil plan and to
+                  form an alliance with the Tiger Sharks. </span></p>
+            </td>
+          </tr>
+          <tr style="height:0px">
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:bold;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Level
+                  3</span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Your
+                  squad has already seen the movieï¼but wants to now
+                  listen to Eragon on their jet trip to Mt. Helena. Can
+                  you find Eragon as an AUDIOBOOK?</span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Your
+                  sidekick fish cant sleep! Sooth their fins with
+                  childrens songs about whale watching.</span></p>
+              <br>
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Hint:
+                  Its a CD. </span></p>
+              <br>
+            </td>
+          </tr>
+          <tr style="height:0px">
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:bold;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Level
+                  4</span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Heat-Wave,
+                  your teams arch nemesis has decided to bring back
+                  Mrs. OLearyâ€™s cow in order to recreate an infamous
+                  fire known for its destruction. Youll find this book
+                  at the Yankee Clipper Branch. </span></p>
+              <br>
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Hint:
+                   It wasnt a good fireï¼it was the ______  Chicago fire
+                  that remains unforgettable.</span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Absolute
+                  Zero, the titan ice monster,  is trying to freeze all
+                  the worlds waterfalls. Gather your squad and find a
+                  book about North America's tallest waterfall in a very
+                  special park. Stop Absolute Zero before it freezes the
+                  waterfall!</span></p>
+              <br>
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Hint:
+                  This book can be found at the Seymour Branch.</span></p>
+            </td>
+          </tr>
+          <tr style="height:31px">
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:bold;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Level
+                  5</span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">The
+                  Fiery Force is teaming up with some professional
+                  heroes that start fires to HELP the environment. Who
+                  are they, and why do they do it? Use the database,
+                  e-Library, to help you find the answer. Type the title
+                  of the article in the library catalog to unlock the
+                  card catalog. In doing so, you will gain the ULTIMATE
+                  SUPERPOWER.</span></p>
+            </td>
+            <td style="border-left:solid #000000 1px;border-right:solid
+              #000000 1px;border-bottom:solid #000000
+              1px;border-top:solid #000000
+              1px;vertical-align:top;padding:7px 7px 7px 7px">
+              <p dir="ltr"
+                style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Are
+                  there oceans in other worlds or galaxies? Use your
+                  powers to fly through space and find out if it's true,
+                  and bring us the details from a news article.  Hint:
+                  Your ol' sidekick "Infotrac" (Junior Edition) might
+                  know the answer. When you find the answer type the
+                  article title in the library card catalog to unlock
+                  the final badge. </span></p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+	   </div> <!-- regWelcome -->
+	
+	   <div id=tab2 style='display:none;'>
+	   </div> <!-- Badges -->
+
+	   <div id=tab3 style='display:none;'>
+	   </div> <!-- Teams -->
+
+	   <div id=tab4 style='display:none;'>
+	   
+	   </div> <!-- Readers -->
+
+	   </div> <!-- choices -->
+
+	<div id=avatarBuilt style='display:none;'>
+	   <div id=buildPic></div>
+	   <div id=buildName></div>
+	   <div id=buildTeam></div>
+	</div> <!-- avatarBuilt -->
+
+   </div> <!-- registerBox -->
+
+
+</div> <!-- container -->
+
+<input type=hidden name=team id=avTeam>
+
+<form id=stash>
+<input type=hidden id=id name=id value=a>
+<input type=hidden id=stash-team-u name=uid value=[%ctx.user.id%]>
+<input type=hidden id=stash-team-t name=tid>
+</form>
+
+        </div>
+
+
+</div>
+
+<script type="text/javascript">
+   prepareForm();
+</script>
+
+[% END %]

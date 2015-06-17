@@ -1,0 +1,35 @@
+Evergreen:
+You need to fetch the current copy of your fm_IDL.xml and store it in your cwd
+
+In libs, you need the TADL libs and the OpenSRF/OpenILS perl libs. Currently,
+these are a bit messy, in that you need all of the OpenSRF/OpenILS libs and
+their dependencies. This could be trimmed down considerably by hacking off
+parts of OpenILS::Utils::Fieldmapper so that it doesn't load Everything Else.
+
+Until that's cleaned up, the "and their dependencies" bit means that you may
+need to install OpenSRF on the web server in question if not installed already.
+
+Authorize.net:
+
+You need an API account with Authorize.net. These scripts use the SIM API. The
+major benefit here is that your patrons do not enter cardholder data into any
+of your systems, and this reduces your PCI-DSS compliance burden.
+
+Bank/Merchant account:
+
+You need a merchant account, either through your bank, Authorize.net, or
+another provider.
+
+Accepting payments:
+pay.cgi goes on a webserver in an https: location, and pulls evergreen bills
+for a patron, displays them, and directs the patron to authorize.net's hosted
+form to accept payment.
+
+relay.cgi is called by authorize.net servers and generates json queue files for
+payments made
+
+Posting payments:
+the json queue files from the web server are run through the post.pl script,
+which uses staff credentials to post the payments to Evergreen
+
+We don't have an automated setup for posting as queue files are generated.

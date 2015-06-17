@@ -1,0 +1,128 @@
+[%  PROCESS "opac/parts/header.tt2";
+    PROCESS "opac/parts/misc_util.tt2";
+    WRAPPER "opac/parts/myopac/base.tt2";
+    myopac_page = "src_form";
+%]
+
+<link rel="stylesheet" type="text/css" href="/src/srcstyle.css" />
+
+<script language=javascript>
+   dojo.require("dojo.parser");
+   dojo.require("dijit.form.Form");
+
+function storeNames(){
+      dojo.xhrPost( {
+        url: "/cgi-bin/utils/public/src-store.cgi",
+        handleAs: "text",
+	form: dojo.byId('names'),
+        load: function(response) {
+                var res = response.split("|");
+		var r = confirm("Congratulations! You are signed up for the Summer Reading Challenge. Check in at one of our locations for a reading log to keep track of the books you've read and pick up your stater prize.");
+		if (r == true)
+		   location.reload();
+	}
+      } ); 
+}
+
+function removeRow(id){
+      if (!confirm('Are you sure you would like to permanently remove this reader?')) return false;
+      dojo.xhrGet( {
+        url: "/cgi-bin/utils/public/src-remove.cgi?row="+id,
+        handleAs: "text",
+        load: function(response) {
+                if (response == 'OK')
+                   location.reload();
+                else
+                   alert(response);
+        }
+      } );
+}
+
+
+function addRow(){
+   var t = document.getElementById('readers');
+   var firstRow = t.rows[1];
+   t.insertRow(-1).innerHTML=firstRow.innerHTML;
+}
+
+</script>
+
+<div id='myopac_div'>
+
+    <div id="acct_request_tabs">
+        <div class="align">
+            <a href='[% mkurl('src') %]'>[% l("Welcome") %]</a>
+        </div>
+        <div id=srcSelected>
+            <a href='#'>[% l("Manage Readers") %]</a>
+        </div>
+	<div class="align">
+	    <a href='[% mkurl('src_form') %]'>[% l("Hero's Quest") %]</a>
+	</div>
+    </div>
+
+
+    <div id='summer_reading_main'>
+    <br/>
+   
+    <div class="header_middle">
+	<span style="float:left;">[% l("Summer Reading 2015") %]</span>
+    </div>
+
+    <table id=src_reader_report>
+        <tr><th>Name</th><th>Book Goal</th><th>Team</th><th>Shirt Size</th></tr>
+      [% USE DBI %]
+      [% USE conn = datafile('/openils/conf/db-connect',delim = '|') %]
+      [% FOREACH c = conn %]
+        [% DBI.connect(c.dsn,c.usr,c.pw) %]
+      [% END %]
+      [% query = DBI.prepare('select * from src2015.readers where owner=?') %]
+      [% FOREACH user = query.execute(ctx.user.id) %]
+        <tr><td>[% user.name %]</td><td>[% user.book_goal %]</td><td>[% user.team %]</td><td>[% user.shirt %]</td>
+        [% IF user.finished %]
+        <td><font color=red>Finished!</font></td>
+	[% ELSE %]
+        <td><input type=button value=X onClick=removeRow([% user.id %]);>
+	[% END %]
+        </tr>
+      [% END %]
+    </table>
+
+
+    <div class="header_middle">
+        <br><br><br> 
+        <span style="float:left;">[% l("Add Readers") %]</span>
+    </div>
+   <br><br><br>
+   <p>   
+    <form id=names>
+    <input type=hidden name=uid value=[% ctx.user.id %]>
+    <table id=src_readers>
+    <tr><th>Name</th><th>Book Goal</th><th>Team</th><th>Shirt Size</th><th>School</th><th/></tr> 
+    <tr><td><input type=text id=name name=name></td><td><select id=books name=books><option>
+    [% num=1; %]
+    [% WHILE num < 100 %]
+    <option>[% num %]
+    [% num=num+1; %]
+    [% END %]
+    <option value=100>100+
+    </select>
+    </td>
+    <td><select id=team name=team><option>Team Terra<option>Splash Squad<option>Wind Warriors<option>Fiery Force</select></td>
+    <td><select id=shirt name=shirt><option><option>Youth XS<option>Youth S<option>Youth M<option>Youth L<option>Adult S<option>Adult M<option>Adult L<option>Adult XL<option>Adult XXL</select></td> 
+    <td><select id=grps name=grps><option><option value='t'>GRPS<option value='f'>Other</select></td>
+    <!--<td><input type=button value='+' onClick=addRow();></td></tr>-->
+    <td><input type=button value='Add' onClick='storeNames();' ></td>
+    </tr>
+    <tr><td colspan=5><hr>Please note: Families/day care providers can add as many children as needed. When a child reaches their reading goal, please stop by any GRPL location to pick up their t-shirt. Your child will be given a shirt with the size and team selected on this page. Due to limited numbers, we cannot exchange teams or sizes. T-shirts will be available to be picked up between July 15 and September 15, while supplies last.</td>
+    </tr>
+    </table>
+    </form>
+   </p>
+
+   
+    </div>
+    <div id=readerBlock><img src=/src/images/teams.png></div>
+</div>
+
+[% END %]

@@ -1,0 +1,528 @@
+[%  PROCESS "opac/parts/misc_util.tt2";
+
+    USE ResolverResolver;
+
+    ctx.result_start = 1 + ctx.page_size * page;
+    ctx.result_stop = ctx.page_size * (page + 1);
+    IF ctx.result_stop > ctx.hit_count; ctx.result_stop = ctx.hit_count; END;
+
+    result_count = ctx.result_start;
+
+%]
+
+<script type="text/javascript" src=/src/src.js></script>
+
+[%# USE Dumper(Indent=2) %]
+[%# Dumper.dump_html(ctx) %]
+
+<!-- For SRC data pulls -->
+[% USE DBI %]
+[% USE conn = datafile('/openils/conf/db-connect',delim = '|') %]
+[% FOREACH c = conn %]
+   [% DBI.connect(c.dsn,c.usr,c.pw) %]
+[% END %]
+
+[% PROCESS "opac/parts/result/paginate.tt2" %] 
+[% ctx.results_count_header = PROCESS results_count_header;
+    ctx.results_count_header %]
+
+[% IF ctx.bookbag %]
+<div id="result-bookbag-heading">
+    <div class="result-bookbag-name">[% ctx.bookbag.name | html %]</div>
+    <div class="result-bookbag-description">[% ctx.bookbag.description | html %]</div>
+</div>
+[% END %]
+
+[%# IF ctx.expand_details %]
+[% CGI.param('detail_record_view') = 1 %]
+[%# END %]
+
+<div id="result_table_div">
+            <div class="facet_sidebar">
+                [% INCLUDE "opac/parts/staff_saved_searches.tt2" %]
+                [% INCLUDE 'opac/parts/result/facets.tt2' %]
+            </div>
+            <div class="result_block">
+                <table cellpadding="0" cellspacing="0" id="result_table_table"
+                    style="margin-top:10px;">
+                    <tbody id="result_table">
+                    [%  FOR rec IN ctx.records;
+                            attrs = {marc_xml => rec.marc_xml};
+                            PROCESS get_marc_attrs args=attrs;
+                            #IF CGI.param('detail_record_view');
+                            #    attrs.title = attrs.title_extended;
+                            #END;
+                            # note: rec.id refers to the record identifier, regardless
+                            # of the type of record. i.e. rec.id = mmr_id ? mmr_id : bre_id
+                            IF rec.mmr_id;
+                                IF rec.mr_constituent_count > 1;
+                                    # metarecords link to record list page
+                                    record_url = mkurl(ctx.opac_root _ '/results',
+                                        {metarecord => rec.mmr_id}, ['page']);
+                                ELSE;
+                                    # for MR, bre_id refers to the master and in
+                                    # this case, only, record
+                                    record_url = mkurl(ctx.opac_root _ '/record/' _ rec.bre_id);
+                                END;
+                                hold_type = 'M';
+                            ELSE;
+                                record_url = mkurl(ctx.opac_root _ '/record/' _ rec.bre_id);
+                                hold_type = 'T';
+                            END;
+                    -%]
+                        <tr class="result_table_row">
+
+[%- bookKit = 0 %]
+[%- eReader = 0 %]
+[%- PERL %]
+        my $title = $stash->get('attrs.title_extended');
+        if ( ($title =~ /Book\sDiscussion\sKit/) || ($title =~ /Book\sClub/) ){
+            $stash->set('bookKit',1);
+        }
+        if ($title =~ /Nook eReader/){
+            $stash->set('eReader',1);
+        }
+[%- END %]
+
+<td>
+<table width=100%><tr id='title_row'> <!-- container for title info -->
+<td>
+<table><tr>
+                                            <td id='row_num' style='font-weight:bold;padding-right:4px;'>[%
+                                                    result_count; result_count = result_count + 1
+                                                %].</td>
+
+[%- merged_uris = args.uris.merge(args.online_res) %]
+[% hooplaCover = 0 %]
+[% hooplaLink = 0 %]
+[%- FOR uri IN merged_uris %]
+    [% coverImg = 0 %]
+    [%- PERL %]
+        my $u = $stash->get('uri.href');
+        if ( $u =~ /^http/ ) { $stash->set('coverImg',1); }
+    [% END %]
+    [%- IF uri.note == 'Cover image' && coverImg == 1 %]
+        [% hooplaCover = uri.href %]
+    [% END %]
+    [%- IF uri.note == 'Instantly available on hoopla.' %]
+        [% hooplaLink = uri.href %]
+    [% END %]
+[%- END %]
+
+                                            <td id='book_jacket' class='result_table_pic_header'>
+                                        [% IF hooplaCover == 0 %]
+                                                [% ident = attrs.isbn_clean || attrs.upc; IF ident; %]
+                                                <img alt="[% l('Image of item') %]"
+                                                        name='item_jacket' class='result_table_pic' height='95' width='60'
+                                                        src='[% ctx.media_prefix %]/opac/extras/ac/jacket/small/[% ident | uri %]' /></a><br />
+                                                [% END %]
+                                        [% ELSE %]
+                                            <img src=[% hooplaCover %] height=60 width=60/> </a><br />
+                                        [% END %]
+                                            </td>
+
+                                            <td id="title_box" class='result_metadata' >
+                                                    [% IF rec.mmr_id %]
+                                                    <abbr class="unapi-id"
+                                                      title='tag:[% ctx.hostname %],[% date.format(date.now, '%Y') %]:metabib-metarecord/[% rec.mmr_id %]'>
+                                                    </abbr>
+                                                    [% ELSE %]
+                                                    <abbr class="unapi-id"
+                                                      title='tag:[% ctx.hostname %],[% date.format(date.now, '%Y') %]:biblio-record_entry/[% rec.bre_id %]'>
+                                                    </abbr>
+                                                    [% END %]
+                                                    <a class='record_title search_link' name='record_[% rec.id %]'
+                                                        href="[% record_url %]"
+                                                        [% html_text_attr('title', l('Display record details for "[_1]"', attrs.title)) %]>
+                                                        [% attrs.title | html %]
+                                                     </a>
+                                                     [% IF rec.mr_constituent_count.defined && rec.mr_constituent_count > 1 %]
+                                                     <span title="[% l('This group contains [_1] records', rec.mr_constituent_count) %]">
+                                                      ([% rec.mr_constituent_count %])
+                                                     </span>
+                                                     [% END %]
+
+[%-
+FOR entry IN attrs.graphic_titles;
+    FOR alt IN entry.graphic;
+        diratt = "";
+        IF alt.dir;
+            diratt = ' dir="' _ alt.dir _ '"';
+        END;
+-%]
+<div class="graphic880"[% diratt %]>
+    [% alt.value | html %]
+</div>
+[%-
+    END;
+END;
+-%]
+
+                                                    <div>
+                                                        <em><a title="[% l("Perform an Author Search") %]"
+                                                                name='item_author'
+                                                                href="[%- 
+                                                                    authorquery = attrs.author | replace('[,\.:;]', '');
+                                                                    mkurl(ctx.opac_root _ '/results', {qtype => 'author', query => authorquery}, ['page'])
+                                                                    -%]">[% attrs.author | html %]</a></em>
+                                                        &nbsp;&nbsp;
+							[%# IF rec.source != 6 %]
+							[% IF attrs.bib_source.id != 6 %]
+                                                          [% attrs.pubdate | html %]
+							[% END %]
+                                                    </div>
+                                                    <table cellpadding="0" cellspacing="0" border="0"
+                                                        class="results_info_table">
+                                                        [%# IF args.holdings.size > 0 %]
+<!--
+                                                        <tr name='bib_cn_list' class='result_table_title_cell'>
+                                                            <td valign='top'>
+                                                                <strong>[% l('Call number:') %]</strong>
+                                                            </td>
+                                                            <td>[% args.holdings.0.label | html %]</td>
+                                                        </tr>
+-->
+                                                        [%# END %]
+
+                                                        [% IF CGI.param('detail_record_view') %]
+                                                        <!-- These fields are visible when viewing the results page in 'detailed' mode -->
+
+                                                        [% IF attrs.publisher %]
+                                                            <tr name="results_pub_tr">
+                                                                <td valign="top">
+                                                                    <strong>[% l('Publisher:') %]</strong>
+                                                                </td>
+                                                                <td>[% attrs.publisher | html %]</td>
+                                                            </tr>
+                                                        [% END %]
+                                                        [%# IF attrs.isbns.size > 0 %]
+<!--
+                                                            <tr name="results_isbn_tr">
+                                                                <td valign="top">
+                                                                    <strong>[% l('ISBN:') %]</strong>
+                                                                </td>
+                                                                <td>[% attrs.isbns.0 | html %]</td>
+                                                            </tr>
+-->
+                                                        [%# END %]
+                                                        [%- IF openurl.enabled == 'true';
+                                                            FOREACH issn IN args.issns;
+                                                                NEXT IF issn == '';
+                                                                res_urls = ResolverResolver.resolve_issn(issn, openurl.baseurl);
+                                                                FOREACH res IN res_urls;
+                                                        %]
+                                                        <tr name="results_issn_tr">
+                                                            <td valign="top">
+                                                                <strong><a href="[% res.target_url %]">
+                                                                [% res.public_name | html %]</a></strong>
+                                                            </td>
+                                                            <td>[% res.target_coverage | html %]</td>
+                                                        </tr>
+                                                                [% END %]
+                                                            [% END %]
+                                                        [% END %]
+
+                                                        [% IF attrs.edition %]
+                                                            <tr name="results_edition_tr">
+                                                                <td valign="top">
+                                                                    <strong>[% l('Edition:') %]</strong>
+                                                                </td>
+                                                                <td>[% attrs.edition | html %]</td>
+                                                            </tr>
+                                                        [% END %]
+                                                        [% IF attrs.phys_desc %]
+                                                            <tr name="results_phys_desc_tr">
+                                                                <td nowrap="nowrap" valign="top">
+                                                                    <strong>[% l('Phys. Desc.:') %]</strong>
+                                                                </td>
+                                                                <td>
+                                                    [%- IF attrs.format_label; %]
+                                                        [% FOR format IN attrs.all_formats %]
+                                                            <img title="[% format.label | html %]"
+                                                                alt="[% format.label | html %]"
+                                                                src="[% format.icon %]" />
+                                                            [% format.label | html %]
+                                                        [% END %]
+                                                    [%- END %]
+
+                                                                    [% args.phys_desc | html %]
+                                                                </td>
+                                                            </tr>
+                                                        [% END %]
+
+[%# IF rec.source == 6 %] 
+[% IF attrs.bib_source.id == 6 %]
+	<tr name="results_cdm_note_tr">
+		<td nowrap="nowrap" valign="top">
+			<strong>[% l('Summary:') %]</strong>
+		</td>
+		<td>
+                        [% args.summary.replace('Grand Rapids History & Special Collections Department', '<br>Grand Rapids History & Special Collections Department<br>').replace(':','') %]
+                        [% args.note | html %]
+		</td>
+	</tr>
+[% END %]
+
+                                                        [%# FOR uri IN args.uris %]
+							[% FOR uri IN merged_uris %]
+							   
+                                                          [% LABEL = l('  <tr name=bib_uri_list class=result_table_title_cell><td valign=top><strong>Electronic resource</strong></td><td>') %]
+                                                                        [%- IF uri.note == 'Finding aid online:' %]
+                                                                                [% LABEL %]
+										 <a href="[% uri.href %]" target=_blank>Archival [% uri.note %]</a>
+                                                                                [%- archMat = 1 %]
+                                                                          [% ELSIF (uri.href.match('overdrive')) %]
+                                                                                [% LABEL %]
+                                                                                <a href="[% uri.href %]" target=_blank>Download From Overdrive</a>
+                                                                          [% ELSIF (uri.href.match('contentdm')) %]
+                                                                                [% LABEL %]
+                                                                                <a href="[% uri.href %]" target=_blank>Click for Archive Photograph</a>
+									  [% ELSIF (uri.href.match('galegroup')) %]
+                                                                                [% LABEL %]
+										<a href="[% uri.href %]" target=_blank>View online in Gale Virtual Reference</a>
+									  [% ELSIF (uri.href.match('michigan.gov')) %]
+										[% LABEL %]
+                                                                                <a href="[% uri.href %]" target=_blank>Click for Online Resource</a>
+                                                                          [% ELSIF ( uri.href.match('bigchalk')) %]
+										[% LABEL %]
+										[% srcUsr = 1 %]
+                                                                                <a href="[% uri.href %]" target=_blank>Click for Online Resource</a>
+                                                                        [% END %]
+<!-- SRCUSR = [% srcUsr %] -->
+[% IF srcUsr == 1 %]
+[% i = 0 %]
+[% query = DBI.prepare('SELECT b.id,bib,ch,list FROM src2015.bibmap b join src2015.challenges c on c.id=ch WHERE bib=?') %]
+[% FOREACH show = query.execute(rec.id) %]
+   [% IF i == 0 %]
+   <a href=# onClick=completeChallenge([%ctx.user.id%],[%show.ch%],[%rec.id%],[%show.list%]) class='hquest'><img src=/src/images/hquest.png border=0></a>
+   [% i = 1 %]
+   [%END%]
+[%END%]
+[%END%]
+
+                                                                </td>
+                                                            </tr>
+                                                        [% END %]
+                                                       [% IF hooplaLink != 0 %]
+                                                        <tr name='bib_uri_list' class='result_table_title_cell'>
+                                                                <td valign='top'>
+                                                                    <strong>[% l('Electronic resource') %]</strong>
+                                                                </td>
+                                                                <td>
+                                                                        <a href="[% hooplaLink %]" target=_blank>Stream from Hoopla</a>
+                                                                </td>
+                                                            </tr>
+                                                        [% END %]
+<div id=mobile_format_icon class='mobile_title'>
+                                                    [%- IF attrs.format_label; %]
+                                                        [% FOR format IN attrs.all_formats %]
+                                                            <img title="[% format.label | html %]"
+                                                                alt="[% format.label | html %]"
+                                                                src="[% format.icon %]" />
+                                                            [% format.label | html %]
+                                                        [% END %]
+                                                    [%- END %]
+</div>
+[% IF attrs.copy_counts.0.count == 0 %]
+</table>
+[% END %]
+                                                            [%- IF args.holdings.size > 0 OR attrs.copy_counts.0.count > 0;
+                                                                 FOREACH copy IN args.holdings;
+                                                                    IF copy.part_label != '';
+                                                                        has_parts = 'true';
+                                                                        LAST;
+                                                       		 END;       
+							      END;
+							    %]
+
+                                            </td>
+                                        </tr></table>
+
+[% PROCESS "opac/parts/result/copy_counts.tt2" %]
+</td>
+<td id='result_table_utils'>
+<div>
+                                                <!-- unAPI link -->
+                                                <abbr class="unapi-id" title='tag:[% ctx.hostname %],[% date.format(date.now, '%Y') %]:biblio-record_entry/[% rec.id %]'></abbr>
+
+</div>
+<td id='result_table_utils'>
+    <table><tr align=right>
+                                            <td nowrap='nowrap'>
+                                                    <div class="">
+[% IF !bookKit AND !eReader %]
+                                                        <div class="result_aux"><a
+                                                                href="[% mkurl(ctx.opac_root _ '/place_hold',
+                                                                    {hold_target => rec.id, hold_type => 'T', hold_source_page => mkurl()}) %]"
+                                                                    name="place_hold_link" class="no-dec"><img class='hide_me'
+                                                                src="[% ctx.media_prefix %]/images/green_check.png"
+                                                                alt=""/><span class="">[% l(' Place Hold') %]</span></a>
+                                                        </div>
+[% END %]
+                                                        <div class="result_aux">
+							    [% srcUsr = 0 %]
+                                                            [%  IF ctx.user;
+                                                                dsetting = "opac.default_list";
+                                                                tclass = (ctx.user_setting_map.$dsetting) ? "temporary" :
+                                                                           (ctx.bookbags.size) ? "temporary divider" : "temporary";
+                                                                 href = mkurl(ctx.opac_root _ '/mylist/add',
+                                                                              {record => rec.id, anchor => 'record_' _ rec.id}, 1);
+							        tmp = "opac.src2015";
+								srcUsr = ctx.user_setting_map.$tmp;	
+                                                            %]
+                                                                <ul class="popmenu">
+                                                                    <li><a href="#" class="no-dec">
+                                                                          [% l("Add to my list") %]
+                                                                        </a>
+                                                                    <ul>
+                                                                    <li class="[% tclass %]">
+                                                                    <a href="[% href %]">[% l('Temporary List') %]</a>
+                                                                    </li>
+                                                                    [% IF ctx.user_setting_map.$dsetting;
+                                                                       class = (ctx.bookbags.size) ? "default divider" : "default";
+                                                                       label = (ctx.default_bookbag) ? ctx.default_bookbag : l('Default List');
+                                                                       href = mkurl(ctx.opac_root _ '/myopac/list/update',
+                                                                                {action => 'add_rec', list => ctx.user_setting_map.$dsetting,
+                                                                                 record => rec.id, anchor => 'record_' _ rec.id}, 1);
+                                                                    %]
+                                                                    <li class="[% class %]">
+                                                                    <a href="[% href %]">[% label %]</a>
+                                                                    </li>
+                                                                    [% END %]
+                                                                    [% IF ctx.bookbags.size;
+                                                                       i = 0;
+                                                                       FOREACH bag IN ctx.bookbags;
+                                                                           href = mkurl(ctx.opac_root _ '/myopac/list/update',
+                                                                                    {action => 'add_rec', list => bag.id, record => rec.id,
+                                                                                     anchor => 'record_' _ rec.id}, 1);
+                                                                           i = i + 1;
+                                                                           IF i == ctx.bookbags.size;
+                                                                    %]
+                                                                    <li class="divider">
+                                                                        [% ELSE %]
+                                                                    <li>
+                                                                        [% END %]
+                                                                    <a href="[% href %]">[% bag.name %]</a>
+                                                                    </li>
+                                                                    [%
+                                                                       END;
+                                                                       END
+                                                                    %]
+                                                                    <li>
+                                                                        <a href="[% mkurl(ctx.opac_root _ '/myopac/lists',
+                                                                                          {limit => ctx.bookbag_count, add_rec => rec.id,
+                                                                                           anchor => 'record_' _ rec.id}) %]">
+                                                                        [% l('See All') %]
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="new">
+                                                                    <a href="[% mkurl(ctx.opac_root _ '/myopac/lists',
+                                                                                      {add_rec => rec.id, anchor => 'record_' _ rec.id}, 0) %]">
+                                                                    [% l('Add to new list') %]
+                                                                    </a>
+                                                                    </li>
+                                                                    </ul>
+                                                                    </li>
+                                                                </ul>
+                                                            [%  ELSE;
+                                                                operation = ctx.mylist.grep(rec.id).size ? "delete" : "add";
+                                                                label = (operation == "add") ? l("Add to my list") : l("Remove from my list");
+                                                                href = mkurl(ctx.opac_root _ '/mylist/' _ operation, 
+                                                                        {record => rec.id, anchor => 'record_' _ rec.id}, 1);
+                                                            %]      
+<!-- SRCUSR = [% srcUsr %] -->
+                                                            <a href="[% href %]" class="no-dec">
+								<img class='hide_me' src="[% ctx.media_prefix %]/images/clipboard.png" alt="" />
+                                                                [% label %]
+                                                            </a>
+                                                            [% END %]
+                                                        </div> <!-- end result_aux -->
+<!-- SRCUSR = [% srcUsr %] -->
+[% IF srcUsr == 1 %]
+[% i = 0 %]
+[% query = DBI.prepare('SELECT b.id,bib,ch,list FROM src2015.bibmap b join src2015.challenges c on c.id=ch WHERE bib=?') %]
+[% FOREACH show = query.execute(rec.id) %]
+   [% IF i == 0 %]
+   <a href=# onClick=completeChallenge([%ctx.user.id%],[%show.ch%],[%rec.id%],[%show.list%]) class='hquest'><img src=/src/images/hquest.png border=0></a>
+   [% i = 1 %]
+   [%END%]
+[%END%]
+[%END%]
+						</div>
+                                            </td>
+                                        </tr>
+    </table>
+</table>
+
+</td></tr>
+<tr><td style='padding-left:20px;padding-bottom:15px;'>
+<table style='width:600px;' class='mobile_hide'>
+                                                            <tr name='bib_cn_list'  rowspan=3 >
+                                                                <td colspan='2'>
+                                                                    <table width=100%>
+                                                                        <tr style='background-color:#eee;font-weight:bold;'>
+                                                                            <td>[% l('Library') %]</td>
+                                                                            <td>[% l('Shelving location') %]</td>
+                                                                            <td>[% l('Call number') %]</td>
+                                                                            [%- IF has_parts == 'true'; %]
+                                                                            <td>[% l('Part') %]</td>
+                                                                            [%- END %]
+                                                                            <td>[% l('Status') %]</td>
+                                                                        </tr>
+                                                                        <tbody>
+								[% count=0 %]
+                                                                [% FOR copy IN args.holdings %]
+								  [% IF (copy.status != 'Discard/Weed' AND copy.status != 'Lost' 
+									AND copy.status != 'Missing' AND copy.status != 'Staff Review') OR ctx.is_staff %]
+								    [% IF count == 5 %]
+									<tr><td colspan=5><a  href="[% mkurl(ctx.opac_root _ '/record/' _ rec.id) %]">More...</a></tr>
+								    [% ELSIF count < 5 %]
+                                                                        <tr style='color:black;'>
+                                                                            <td>[% copy.library | html %]</td>
+                                                                            <td>[% copy.location | html %]</td>
+                                                                            <td><a href='/eg/opac/cnbrowse?cn=[% copy.label %]' class='classic_link'>[% copy.label | html %]</a></td>
+                                                                            [%- IF has_parts == 'true'; %]
+                                                                            <td>[% copy.part_label %]</td>
+                                                                            [%- END %]
+                                                                            <td>[% copy.status | html %]</td>
+                                                                        </tr>
+								    [% END %]
+								   [% count=count+1 %]
+								  [% END %]
+                                                                [% END %]
+[% FOREACH peer IN ctx.foreign_copies %]
+[% FOREACH bib IN  peer.0.foreign_copy_maps %]
+[% IF bib.peer_record == rec.id %]
+    <tr style='color:black;'>
+     <td>
+        [% ctx.get_aou(bib.target_copy.circ_lib).name %]
+    </td><td>
+        [% bib.target_copy.location.name %]
+    </td><td>
+        <a href="[% mkurl(ctx.opac_root _ '/record/' _ bib.target_copy.call_number.record) %]">[% bib.target_copy.call_number.label %]</a>
+    </td><td>
+        [% bib.target_copy.status.name %]
+    </td></tr>
+[% END %]
+[% END %]
+[% END %]
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            [%- has_parts = 'false';
+                                                                END;
+                                                             %]
+</table>
+                                                        [% END %] <!-- END detail_record_view -->
+</td></tr></table>
+[% END %]
+    [% ctx.results_count_header %]
+</table>
+</div>
+</div>
+
+[% IF srcUsr == 1 %]
+     <div id=srcReturn><a href=/eg/opac/myopac/src_form><img src=/src/images/hquest-red.png></a></div>
+[% END %]
+

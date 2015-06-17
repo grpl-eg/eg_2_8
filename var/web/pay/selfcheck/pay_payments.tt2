@@ -1,0 +1,185 @@
+[% base = 'selfcheck/pay_wrapper.tt2' %]
+[% WRAPPER $base
+    title = 'Online Payments'
+%]
+<div id=extra></div>
+
+[%# IF xacts.size > 0 %]
+
+<style type="text/css">
+        @import "/js/dojo/dojo/resources/dojo.css";
+#payments th {padding: 3px; background-color: #efefef;}
+#payments {border-style: dotted; border-width: 1px; padding: 10px;}
+</style>
+
+<script type='text/javascript' src='/js/dojo/dojo/dojo.js' djConfig="parseOnLoad: true"></script>
+
+<script type='text/javascript'>
+function calcBalance() {
+	var bal=[% balance %];
+	var pay=0;
+	var c = dojo.byId('toCredit').value;
+        c = parseFloat(c);
+	var list = '[';
+	var row = dojo.query("input[name='xact2Pay']");
+	for (var i=0;i < row.length;i++){
+		var val = row[i].value.split("|");
+		if (row[i].checked){
+			pay = pay + parseFloat(val[1]);
+			list += '"'+val[0]+'",';	
+		}
+	}
+	if (c > 0){
+		list += '"1111'+c+'",';	
+        }
+	list = list.replace(/.$/,']');
+	dojo.byId('xact_list').value = list;
+        pay = pay + c;
+	dojo.byId('toBPaid').value = pay.toFixed(2);
+	dojo.byId('x_amount').value = pay.toFixed(2);
+	var newBal = bal-pay+c;
+	//dojo.byId('toCredit').value = c.toFixed(2) || '0.00';
+	dojo.byId('remaining').value = newBal.toFixed(2);
+
+        if (c > 0){
+		var cl = dojo.byId('creditLine');  // start with a clean slate
+                if (cl)
+                        dojo.byId('form1').removeChild(cl);
+		var val = '1111'+c+'<|>Add Credit to Account<|><|>1<|>'+c+'<|>0';
+		var inputElement = document.createElement("input");
+                        inputElement.setAttribute("type", "hidden");
+                        inputElement.setAttribute("name", "x_line_item");
+                        inputElement.setAttribute("value", val);
+			inputElement.setAttribute("id",'creditLine');
+                        dojo.byId('form1').appendChild(inputElement);
+        }else{
+		var cl = dojo.byId('creditLine');
+		if (cl) 
+                	dojo.byId('form1').removeChild(cl);
+	}
+}
+
+function clearCredit() {
+	dojo.byId('toCredit').value = 0;
+	dojo.byId("form1").removeChild(dojo.byId('creditLine'));
+	calcBalance();
+}
+
+function submitIt() {
+	dojo.byId("form1").removeChild(dojo.byId('payButton'));
+
+        // store the line items we want
+        var row = dojo.query("input[id='items']");
+        for (var i=0;i < row.length;i++){
+                var val = row[i].value.substring(0,8);
+                if (dojo.byId('xact_list').value.match(val)){
+                        var inputElement = document.createElement("input");
+                        inputElement.setAttribute("type", "hidden");
+                        inputElement.setAttribute("name", "x_line_item");
+                        inputElement.setAttribute("value", row[i].value);
+                        dojo.byId('form1').appendChild(inputElement);
+                }
+                row[i].setAttribute("name", "unpaid_line_item");
+        }
+
+	dojo.rawXhrPost({
+		url : "/pay/pay_finalize.cgi",
+		form: "form1",
+		sync: "true",
+		handleAs : "text",
+		load: function(data){
+			var inputElement = document.createElement("input");
+			inputElement.setAttribute("type", "hidden");
+			inputElement.setAttribute("name", "x_fp_hash");
+			inputElement.setAttribute("value", data);
+			dojo.byId('form1').appendChild(inputElement);
+			document.forms['form1'].submit();
+        	}
+    	});
+
+}
+
+       function isNumberKey(evt)
+       {
+          var charCode = (evt.which) ? evt.which : event.keyCode;
+          if  (charCode < 48 || charCode > 57)
+             return false;
+
+          return true;
+       }
+
+</script>
+
+<table id='payments' width='600px';>
+<tr>
+<th></th>
+<!-- <th>Transaction ID</th> -->
+<th>Type</th>
+<th>Description</th>
+<th>Balance</th>
+</tr>
+
+[% FOREACH xact IN xacts %]
+<tr>
+<td><input type='checkbox' name='xact2Pay' value="[% xact.id %]|[% xact.balance %]" checked onChange='calcBalance();'></td>
+<!-- <td>[% xact.id %]</td> -->
+<td>[% xact.type %]</td>
+<td>[% xact.descr %]</td>
+<td>[% xact.balance %]</td>
+</tr>
+[% END %]
+
+</table>
+
+[% IF ok_to_pay %]
+<table><tr><td colspan='2'>**A maximum of 30 line items may be paid per transaction.<br>&nbsp;</td></tr>
+<tr><td>Current Balance:</td><td><input type='text' size='10' value='[% balance %]' readonly style="text-align: right"></td></tr>
+<tr><td>Purchase Credit:</td><td><select id='toCredit' style="text-align: right; width: 100px;" onChange='calcBalance();' onkeypress="return isNumberKey(event);"><option>0.00<option>0.15<option>0.30<option>0.45<option>0.60<option>0.75<option>0.90<option>1.00<option>1.05<option>1.20<option>1.35<option>1.50<option>1.65<option>1.80<option>1.95<option>2.00<option>5.00<option>10.00<option>15.00<option>20.00<option>25.00</select> </td></tr> 
+<tr><td>To Pay:</td><td><input type='text' size='10' id='toBPaid' readonly value='[% balance %]' style="text-align: right;font-weight: bold;"></td></tr>
+<tr><td>Remaining:</td><td><input type='text' size='10' id='remaining' readonly value='0.00' style="text-align: right"></td></tr>
+</table>
+<p>Patron Credit available: <b>$ [% credit %]</b>&nbsp; Patron Credit can be used to make payment at any Checkout Station.<br>&nbsp;</p>
+
+<p>To pay this amount online with a credit or debit card, you will be directed to Authorize.net to enter your payment details.</p>
+[% form %]
+[% ELSE %]
+<p>We're sorry, but there is a billing issue with your account that prevents us from accepting online payment at this time. Please phone or visit the library to make payment arrangements. Thank you!</p>
+[% END %]
+
+[%# ELSE %]
+
+<!-- You have no transactions to pay. Thank you for using the library! -->
+
+[%# END %]
+
+[% IF unpayable_xacts.size > 0 %]
+<br />
+<hr />
+<br />
+<font size='+1'>
+The following charges cannot be paid online until items are returned or reported lost.
+<br />
+&nbsp;
+</font>
+<table class='data_grid' width='600px';>
+<tr>
+<th>Transaction ID</th>
+<th>Type</th>
+<th>Description</th>
+<th>Balance</th>
+</tr>
+
+[% FOREACH xact IN unpayable_xacts %]
+<tr>
+<td>[% xact.id %]</td>
+<td>[% xact.type %]</td>
+<td>[% xact.descr %]</td>
+<td>[% xact.balance %]</td>
+</tr>
+[% END %]
+
+</table>
+[% END %]
+
+[% END %]
+

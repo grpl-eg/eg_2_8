@@ -1,0 +1,44 @@
+* {
+	padding: 0;
+	margin: 0;
+	font-family:Helvetica,"Lucida Grande",Verdana,Arial,sans-serif;
+}
+
+body {
+	overflow: visible;
+	padding: 0;
+	margin: 0;
+	background: #e4d4b2;
+}
+
+a {
+	color: #762603;
+	font-size:.8em;
+}
+
+#leftlinks {
+	padding: 0;
+	float:left;
+}
+#rightlinks {
+	padding: 0;
+	float:right;
+}
+
+#main {
+	border-top:1px solid #465f74;
+	clear: both;
+	text-align: center;
+	margin-top: 15px;
+	padding-top: 65px;
+}
+
+#footer {
+	padding-top: 100px;
+	text-align: center;
+	font-size:.7em;
+}
+
+.payment_table {
+	padding: 5px;
+}

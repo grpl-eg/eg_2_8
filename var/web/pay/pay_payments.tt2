@@ -1,0 +1,140 @@
+[% base = 'pay_wrapper.tt2' %]
+[% WRAPPER $base
+    title = 'Online Payments'
+%]
+
+[% IF xacts.size > 0 %]
+
+<style type="text/css">
+        @import "/js/dojo/dojo/resources/dojo.css";
+</style>
+
+<script type='text/javascript' src='/js/dojo/dojo/dojo.js' djConfig="parseOnLoad: true"></script>
+
+<script type='text/javascript'>
+function calcBalance() {
+	
+	var bal=[% balance %];
+	var pay=0;
+	var list = '[';
+	var row = dojo.query("input[name='xact2Pay']");
+	for (var i=0;i < row.length;i++){
+		var val = row[i].value.split("|");
+		if (row[i].checked){
+			pay = pay + parseFloat(val[1]);
+			list += '"'+val[0]+'",';	
+		}
+	}
+	list = list.replace(/.$/,']');
+	dojo.byId('xact_list').value = list;
+	dojo.byId('toBPaid').value = pay.toFixed(2);
+	dojo.byId('x_amount').value = pay.toFixed(2);
+	var newBal = bal-pay;
+	dojo.byId('remaining').value = newBal.toFixed(2);
+}
+
+function submitIt() {
+	dojo.byId("form1").removeChild(dojo.byId('payButton'));
+
+        // store the line items we want
+        var row = dojo.query("input[id='items']");
+        for (var i=0;i < row.length;i++){
+                var val = row[i].value.substring(0,8);
+                if (dojo.byId('xact_list').value.match(val)){
+                        var inputElement = document.createElement("input");
+                        inputElement.setAttribute("type", "hidden");
+                        inputElement.setAttribute("name", "x_line_item");
+                        inputElement.setAttribute("value", row[i].value);
+                        dojo.byId('form1').appendChild(inputElement);
+                }
+                row[i].setAttribute("name", "unpaid_line_item");
+        }
+
+	dojo.rawXhrPost({
+		url : "/pay/pay_finalize.cgi",
+		form: "form1",
+		sync: "true",
+		handleAs : "text",
+		load: function(data){
+			var inputElement = document.createElement("input");
+			inputElement.setAttribute("type", "hidden");
+			inputElement.setAttribute("name", "x_fp_hash");
+			inputElement.setAttribute("value", data);
+			dojo.byId('form1').appendChild(inputElement);
+			document.forms['form1'].submit();
+        	}
+    	});
+
+}
+
+</script>
+
+<table class='data_grid' width='600px';>
+<tr>
+<th></th>
+<!-- <th>Transaction ID</th> -->
+<th>Type</th>
+<th>Description</th>
+<th>Balance</th>
+</tr>
+
+[% FOREACH xact IN xacts %]
+<tr>
+<td><input type='checkbox' name='xact2Pay' value="[% xact.id %]|[% xact.balance %]" checked onChange='calcBalance();'></td>
+<!-- <td>[% xact.id %]</td> -->
+<td>[% xact.type %]</td>
+<td>[% xact.descr %]</td>
+<td>[% xact.balance %]</td>
+</tr>
+[% END %]
+
+</table>
+
+[% IF ok_to_pay %]
+<table><tr><td colspan='2'>**A maximum of 30 line items may be paid per transaction.<br></td></tr>
+<tr><td>Current Balance:</td><td><input type='text' size='10' value='[% balance %]' readonly style="text-align: right"></td></tr>
+<tr><td>To Pay:</td><td><input type='text' size='10' id='toBPaid' readonly value='[% balance %]' style="text-align: right;font-weight: bold;"></td></tr>
+<tr><td>Remaining:</td><td><input type='text' size='10' id='remaining' readonly value='0.00' style="text-align: right"></td></tr>
+</table>
+<p>To pay this amount online with a credit or debit card, you will be directed to Authorize.net to enter your payment details.</p>
+[% form %]
+[% ELSE %]
+<p>We're sorry, but there is a billing issue with your account that prevents us from accepting online payment at this time. Please phone or visit the library to make payment arrangements. Thank you!</p>
+[% END %]
+
+[% ELSE %]
+
+You have no transactions to pay. Thank you for using the library!
+
+[% END %]
+
+[% IF unpayable_xacts.size > 0 %]
+<br />
+<hr />
+<br />
+<font size='+1'>
+The following charges cannot be paid online until items are returned or reported lost.
+<br />
+&nbsp;
+</font>
+<table class='data_grid' width='600px';>
+<tr>
+<th>Transaction ID</th>
+<th>Type</th>
+<th>Description</th>
+<th>Balance</th>
+</tr>
+
+[% FOREACH xact IN unpayable_xacts %]
+<tr>
+<td>[% xact.id %]</td>
+<td>[% xact.type %]</td>
+<td>[% xact.descr %]</td>
+<td>[% xact.balance %]</td>
+</tr>
+[% END %]
+
+</table>
+[% END %]
+
+[% END %]

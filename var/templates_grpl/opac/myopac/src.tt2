@@ -1,0 +1,82 @@
+[%  PROCESS "opac/parts/header.tt2";
+    PROCESS "opac/parts/misc_util.tt2";
+    WRAPPER "opac/parts/myopac/base.tt2";
+    myopac_page = "src";
+%]
+
+<link rel="stylesheet" type="text/css" href="/src/srcstyle.css" />
+
+<script language=javascript>
+function srcRegister(id){
+   dojo.byId(uid).value=id;
+   dojo.xhrPost( {
+        url: "/cgi-bin/utils/public/src/init_reg.cgi",
+        handleAs: "text",
+        form: dojo.byId('stash'),
+        load: function(response) {
+	 	window.location='/eg/opac/myopac/src_readers';
+        }
+   });
+}
+
+</script>
+
+      [% USE DBI %]
+      [% USE conn = datafile('/openils/conf/db-connect',delim = '|') %]
+      [% FOREACH c = conn %]
+        [% DBI.connect(c.dsn,c.usr,c.pw) %]
+      [% END %]
+      [% query = DBI.prepare('select * from src2015.team_usrmap where usr=?') %]
+      [% FOREACH user = query.execute(ctx.user.id) %]
+	[% IF user.id > 0 %]
+	   [% registered = 1 %]
+	[% END %]
+      [% END %]
+
+<div id='myopac_request_div'>
+
+    [% IF registered == 1 %]
+
+    <div id="acct_request_tabs">
+        <div id="srcSelected">
+            <a href='#'>[% l("Welcome") %]</a>
+        </div>
+	<div class="align">
+            <a href='[% mkurl("src_readers") %]'>[% l("Manage Readers") %]</a>
+        </div>
+        <div class="align">
+            <a href='[% mkurl("src_form") %]'>[% l("Hero's Quest") %]</a>
+        </div>
+    </div>
+
+
+    <div id='summer_reading_main'>
+    <br/>
+   
+    <div class="header_middle">
+	<span style="float:left;">[% l("Summer Reading 2015") %]</span>
+    </div>
+    
+    <div id=srcInfo>
+	The Animal Alliance needs your reading super power! 
+	Join a team and read 15 minutes a day to grow your powers and help your team!
+	<br><br>
+	<img src=/src/images/src-main.png>
+    </div>
+    </div>
+
+    [% ELSE %]
+    <div id=srcInfo>
+        The Animal Alliance needs your reading super power! <br>Join a team and read 15 minutes a day to grow your powers and help your team!
+	<br><br>
+	<span> <img src=/src/images/src-register-large.png onClick=srcRegister([%ctx.user.id%]);> 
+        <form id=stash>
+	<input type=hidden name=uid id=uid>
+	</form>
+        <br>
+        <a href=http://www.grpl.org/heros-quest/><u>Learn more about the Hero's Quest here.</u></a>
+    </div>
+    [% END %]
+</div>
+
+[% END %]

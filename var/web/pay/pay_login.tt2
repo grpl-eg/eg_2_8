@@ -1,0 +1,46 @@
+[% base = 'pay_wrapper.tt2' %]
+[% WRAPPER $base
+    title = 'Online Payments'
+%]
+
+<div id='canvas'>
+<div id='home_canvas'>
+	<style>
+	       	.mybg {
+			height: 20px;
+			background-image: url(/opac/images/content_leftSidebar_bkg.gif);
+			background-repeat: repeat-y;
+			background-attachment: scroll;
+			background-position: left top;
+		     }
+		.thebox {
+			border: 1px solid #dddddd;
+			padding: 15px;
+		     }
+        </style>
+	<center>
+	<table class='thebox'>
+
+		<tbody>
+
+			<tr class='mybg'>
+				<td><h1>Online Payments</h1></td>
+			</tr>
+			<tr class='mybg'>
+			<td>
+				<p>Please log in using your library card barcode and password.</p>
+				<p style='color: red;'>[% err %]</p>
+				<form method="POST" action="[% uri %]">
+				<table>
+				<tr><td><label for="user">Barcode: </label></td><td><input id="user" name="user" autocomplete="off" /></td></tr>
+				<tr><td><label for="pass">Password: </label></td><td><input type="password" id="pass" name="pass" autocomplete="off" /></td></tr>
+				</table>
+				<br/>
+				<input type="submit" value="Log in and view bills" />
+				</form>
+			</td>
+			</tr>
+</table>
+</div></div>
+
+[% END %]

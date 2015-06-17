@@ -1,0 +1,94 @@
+[% base = 'selfcheck/pay_wrapper.tt2' %]
+[% WRAPPER $base
+    title = 'Online Payment Receipt'
+%]
+
+<script language='javascript'>
+
+function print_it(){
+
+	var i = document.getElementById('inv').value;
+        var x = document.getElementById('xacts').value;
+        var d = document.getElementById('desc').value;
+        var c = document.getElementById('cust').value;
+        var a = document.getElementById('amt').value;
+	var t = document.getElementById('time').value;
+    
+	var disp_setting="toolbar=no,location=no,directories=no,menubar=no,";
+	disp_setting+="scrollbars=yes,width=650, left=100, top=25";
+	var docprint=window.open("","",disp_setting);
+	docprint.document.write('<body onLoad="self.print()"><div style="position: relative; left: 70px;"><table cellpadding=10><tr><td colspan=2 align=center><b>Grand Rapids Public Library<br/>Online Payment</b><br/><br/>'+t+'<br/><br/></td></tr>');
+	docprint.document.write('<tr><td>Invoice Number:</td><td>'+i+'</td></tr>');
+        docprint.document.write('<tr><td>Transaction ID(s):</td><td>'+x+'</td></tr>');
+        docprint.document.write('<tr><td>Description:</td><td>'+d+'</td></tr>');
+        docprint.document.write('<tr><td>Customer ID:</td><td>'+c+'</td></tr>');
+	docprint.document.write('<tr><td colspan=2><hr></td></tr>');
+        docprint.document.write('<tr><td>Amount:</td><td>'+a+'</td></tr>');
+	docprint.document.write('</table></div>');
+	docprint.document.write('<table class="data_grid" width="400">');
+        docprint.document.write('<tr><td><br/><font size=+1>Thank you! Your account balance will be updated shortly to reflect your payment.</font><br/>');
+        docprint.document.write('<br/><b>Refund policy for lost items:</b> If you have paid for a lost item, you have 90 days from the date of payment to return the item for a refund (less overdue fines). The item must be returned to a Grand Rapids Public Library service desk in good condition to qualify.<br/><br/>');
+        docprint.document.write('<b>Collection accounts:</b> If your account is in collections, Unique Management Services, Inc. will be notified of your payment. <br/>');
+        docprint.document.write('<br/>If you would like any further assistance with your patron account, please feel free to contact us at (616)988-5402 ext. 2000. We are here to help!');
+        docprint.document.write('</td></tr></table>');
+	docprint.document.close();
+}
+
+</script>
+<div id='canvas'>
+<div id='home_canvas'>
+	<style>
+	       	.mybg {
+			height: 20px;
+			background-image: url(https://catalog.grpl.org/opac/images/content_leftSidebar_bkg.gif);
+			background-repeat: repeat-y;
+			background-attachment: scroll;
+			background-position: left top;
+		     }
+		.thebox {
+			border: 1px solid #dddddd;
+			padding: 15px;
+		     }
+        </style>
+	<input type='hidden' id='inv' value="[% invoice %]"/>
+	<input type='hidden' id='xacts'   value="[% trans_id %]"/>
+	<input type='hidden' id='desc' value="[% description %]"/>
+        <input type='hidden' id='cust'   value="[% cust_id %]"/>
+	<input type='hidden' id='amt' value="[% amount %]"/>
+	<input type='hidden' id='time' value="[% time %]"/>
+	<center>
+	<table class='thebox'>
+
+		<tbody>
+
+			<tr class='mybg'>
+				<td align='center'><h1>Online Payment Receipt</h1><br/>[% time %]<br/><br/></td>
+			</tr>
+			<tr class='mybg'>
+			<td>
+			   <div style='padding-left: 100px;'>
+				<table class='data_grid' width='400'>
+				<tr><td>Invoice Number:</td><td>[% invoice %]</td></tr>
+				<tr><td>Transaction ID(s):</td><td>[% trans_id %]</td></tr>
+				<tr><td>Description:</td><td>[% description %]</td></tr>
+				<tr><td>Customer ID:</td><td>[% cust_id %]</td></tr>
+				<tr><td colspan='2'><hr></td></tr>
+                                <tr><td>Amount:</td><td>[% amount %]</td></tr>
+				</table>
+			   </div>
+				<br/>
+				<table class='data_grid' width='600'>
+				<tr><td>
+					<font size=+1>Thank you! Your account balance will be updated shortly to reflect your payment.</font><br/>
+					<br/><b>Refund policy for lost items:</b> If you have paid for a lost item, you have 30 days from the date of payment to return the item for a refund (less overdue fines). The item must be returned to a Grand Rapids Public Library service desk in good condition to qualify.<br/><br/>
+					<b>Collection accounts:</b> If your account is in collections, Unique Management Services, Inc. will be notified of your payment. <br/>
+					<br/>If you would like any further assistance with your patron account, please feel free to contact us at (616)988-5402 ext. 2000. We're here to help! 
+				</td></tr>
+				</table>
+			</td>
+			</tr>
+			<tr align='right'><td><br/><a href='javascript::void(0)' onClick='print_it()'><b>Print Copy</b></a></td></tr>
+</table>
+</div></div>
+
+[% END %]

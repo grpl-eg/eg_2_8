@@ -1,0 +1,84 @@
+/* 
+WOO CUSTOM STYLESHEET
+---------------------
+
+Instructions:
+
+Add your custom styles in this file instead of style.css so it 
+is easier to update the theme. Simply copy an existing style 
+from style.css to this file, and modify it to your liking. */
+
+/* 3.5 Entry Tables */
+.entry table  { width: 100%;}
+.entry table tr.alt-table-row  { background: #f9f9f9; }
+.entry table th  { padding: 0px 0 0px 0; }
+.entry table td  { padding: 0px 0 0px 0px;}
+.entry table td img { padding: 0px 0 0px 0px;}
+
+/* Fix tables */
+table, tbody, tfoot, thead, tr, th, td {
+padding: 1px;
+vertical-align: top; }
+
+td {
+    margin: 1px;
+    padding: 1px;
+}
+
+/* Fix images */
+img { padding: 0; margin: 0; }
+
+/* Branch locations footer */
+#footer-branches {
+width: 960px;
+margin-top: 0pt;
+margin-right: auto;
+margin-bottom: 0pt;
+margin-left: auto;
+color: #161d27; 
+font-size: 11px;
+color: #353e4b;
+line-height: 13px;}
+
+/* 2.6 Footer */
+#footer-out { background: #ececec; border-top: 2px solid #161d27; }
+#footer{padding: 20px 0 0;border-top: 0px solid #232220; color:#161d27; }
+#footer p { color:#161d27; }
+#footer #credit a { color: #161d27; text-decoration: underline; }
+#footer #credit img{vertical-align:middle;}
+#footer #credit span{display:none;}
+#footer #copyright span { font:bold 14px "arial", serif; color:#161d27; margin-right:5px; } 
+
+#sidebar h4 {
+font-size: 13px;
+font-family: sans-serif;
+margin-bottom: 0px }
+
+.ui-tabs .ui-tabs-panel
+{padding-bottom: 0px;}
+
+/* FIX LINE SPACING in ul and li inside pages */
+/* 3.1 Typographic Elements */
+.entry, .entry p  { font:13px/1.5em sans-serif; }
+.entry h1, .entry h2, .entry h3, .entry h4, .entry h5, .entry h6 { margin:1.5em 0 0; line-height:1.5em; }
+.entry p  { margin-bottom: 1.5em; }
+.entry blockquote  { background:url(images/blockquote.png) no-repeat 0 13px; padding: 10px 20px 10px 50px; color: #444;  }
+.entry blockquote p  { font-style:italic; }
+
+
+
+.entry ul  { margin-bottom: 1.5em; padding: 0 0 0 20px; }
+.entry ul ul  { margin: 0; }
+.entry ul li  {	list-style-type: disc; }
+.entry ul ul li  { list-style-type: circle; }
+
+.entry ol  { margin-top: 0em; margin-bottom: 0em; padding: 0 0 0 30px; }
+.entry ol ol  { margin: 0; }
+.entry  ol li  { list-style-type: decimal; }
+.entry  ol li ol li  { list-style-type: lower-latin; }
+
+/* Fix images inside paragraphs /*/
+p img {margin: 5; padding 0;}
+
+/*Fix Checkbox Layout in Contact Form 7*/
+span.wpcf7-list-item { display: block; }

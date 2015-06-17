@@ -1,0 +1,100 @@
+[%  PROCESS "opac/parts/header.tt2";
+    PROCESS "opac/parts/misc_util.tt2";
+    WRAPPER "opac/parts/myopac/base.tt2";
+%]
+
+<div id='myopac_summary_div' style="padding:0px;">
+
+    <div style="float:left;">
+        <div class="header_middle">[% l('Account Summary') %]</div>
+    </div>
+
+    <!-- fines summary along the right of the page -->
+    [%# IF myopac_main_page == "payment_form" OR (
+        !ctx.fines.circulation.size AND !ctx.fines.grocery.size
+    ) %]
+    <!--<div id="myopac_sum_fines_placehold"></div>
+    -->
+    [%# ELSE %]
+    <div id="myopac_sum_fines">
+        [% l('Fines:') %]
+        <span class='[% ctx.user_stats.fines.balance_owed ? "alert" : ""%]'>
+            [% money(ctx.user_stats.fines.balance_owed) %]
+        </span><br />
+        [%# IF (ctx.fines.grocery.size OR ctx.fines.circulation.size) AND ctx.get_org_setting(ctx.user.home_ou, 'credit.payments.allow') == 1 %]
+	[%# IF (ctx.fines.grocery.size OR ctx.fines.circulation.size) %]
+        <form action="https://catalog.grpl.org/pay/pay2.cgi" method="post">
+            <input type=hidden name=ses value=[% ctx.authtoken %]>
+            <input type="submit" title="[% l('Pay Fines') %]"
+            value="[% l('Pay Fines') %]" class="pos-rel-top-5 opac-button" /></form>
+        [%# END %]
+    </div>
+    [%# END %]
+
+    <div>
+        <div id="acct_sum_block">
+            <div style="padding:10px 0px;">
+            [%- IF date.format(ctx.parse_datetime(ctx.user.expire_date), '%s') < date.format(date.now , '%s');
+               fmt_expire_date = date.format(ctx.parse_datetime(ctx.user.expire_date), DATE_FORMAT);
+            %]
+            <span class="alert">[% l("Your library card expired on [_1]. Please contact a librarian to resolve this issue.", fmt_expire_date) %]</span>
+            [% END %]
+            </div>
+            <table class="acct_sum_table" title="[% l('Account Summary') %]">
+                <tr>
+                    <td>[% l("Items Currently Checked out ([_1])", ctx.user_stats.checkouts.total_out) %]</td>
+                    <td align="right">
+                        <a href="[% mkurl(ctx.opac_root _ '/myopac/circs') %]"
+                            title="[% l('View My Checked Out Items') %]">
+                            [% l("View All") %]
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>[% l('Items Currently on Hold ([_1])', ctx.user_stats.holds.total) %]</td>
+                    <td align="right">
+                        <a href="[% mkurl(ctx.opac_root _ '/myopac/holds') %]"
+                            title="[% l('View My Holds') %]">
+                            [% l('View All') %]
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>[% l('Items ready for pickup ([_1])', ctx.user_stats.holds.ready) %]</td>
+                    <td align="right">
+                        <a href="[% mkurl(ctx.opac_root _ '/myopac/holds', {available => 1}) %]"
+                            title="[% l('View My Holds Ready for Pickup') %]">
+                            [% l('View All') %]
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="clear-both"></div>
+
+    [% IF ctx.user.notes.0 %]
+    <table class="acct_notes">
+        <thead><th>[% l('Note title') %]</th><th>[% l('Content') %]</th></thead>
+        <tbody>
+        [% FOR note IN ctx.user.notes %]
+            <tr><td class='public-note-title'>[% note.title | html %]</td><td>[% note.value | html %]</td></tr>
+        [% END %]
+        </tbody>
+    </table>
+    [% END %]
+
+    <div id='fines_payments_wrapper'>
+        <div id='acct_fines_tabs'>
+            [% IF myopac_main_page == 'main' %]
+            <a href='#' class="acct-tab-on">[% l("Fines") %]</a>
+            <a href='[% mkurl(ctx.opac_root _ '/myopac/main_payments') %]' class="acct-tab-off">[% l("Payments") %]</a>
+            [% ELSE %]
+            <a href='[% mkurl(ctx.opac_root _ '/myopac/main') %]' class="acct-tab-off">[% l("Fines") %]</a>
+            <a href='#' class="acct-tab-on">[% l("Payments") %]</a>
+            [% END %]
+        </div>
+    </div>
+    [% content %]
+</div>
+[% END %]

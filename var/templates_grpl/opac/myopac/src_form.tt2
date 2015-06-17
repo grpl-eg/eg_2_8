@@ -1,0 +1,215 @@
+[%  PROCESS "opac/parts/header.tt2";
+    PROCESS "opac/parts/misc_util.tt2";
+    WRAPPER "opac/parts/myopac/base.tt2";
+    myopac_page = "src_form";
+%]
+
+<link rel="stylesheet" type="text/css" href="/src/srcstyle.css" />
+
+<script type="text/javascript" src="[% ctx.media_prefix %]/js/dojo/dojo/dojo.js"></script>
+
+<script type="text/javascript">
+   dojo.require("dojo.parser");
+   dojo.require("dijit.form.Form");
+</script>
+
+<div id='myopac_request_div'>
+
+    <div id="acct_request_tabs">
+        <div class="align">
+            <a href='[% mkurl("src") %]'>[% l("Welcome") %]</a>
+        </div>
+        <div class="align">
+            <a href='[% mkurl("src_readers") %]'>[% l("Manage Readers") %]</a>
+        </div> 
+        <div id=srcSelected>
+            <a href='#'>[% l("Hero's Quest") %]</a>
+	</div>
+    </div>
+	<div>
+
+<!--       	   <iframe src=/src width=700 height=700></iframe> -->
+<script type="text/javascript" src=/src/src.js></script>
+<link rel="stylesheet" href="/src/srcstyle.css" type="text/css">
+
+<div id=src_container>
+
+   <div id=registerBox>
+	   <div id=controls>
+		<span id=header1 onClick=changeTab(1); style='opacity:.3';>Hero's Quest</span>
+		<span id=header3 onClick=changeTab(3);>My Team</span>
+		<span id=header2 onClick=changeTab(2);>Challenges</span>
+	   </div> <!--controls -->
+
+	   <div id=choices>
+   
+           <div id=tab1>
+                <p class='welcome'>
+		<center><img src=/src/images/hquest-banner.png></center>
+		Welcome to the Hero's Quest Summer Reading Challenge. Pick one of four superheroes to join the Animal Alliance. You'll complete a series of challenges to give your team the super powers they need to compete against their opponents.
+		</p>
+    <br><br>
+    <p class='heading'>
+        Here's how to play: </p>
+    <ol style="margin-top:0pt;margin-bottom:0pt;margin-left: 9px;">
+      <li dir="ltr"
+style="list-style-type:decimal;font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">
+        <p dir="ltr"
+          style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;margin-left: 9px;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Read
+             a challenge. There are 20 badges to collect and five levels
+            of each element (air, water, earth, and fire). Every level
+            increases in difficulty.  Look at the tip section if you get
+            stuck searching! Dont forget to ask your librarian for help
+            if you can't figure out a question!  </span></p>
+      </li>
+    </ol>
+    <br>
+    <ol style="margin-top:0pt;margin-bottom:0pt;margin-left: 9px;" start="2">
+      <li dir="ltr"
+style="list-style-type:decimal;font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">
+        <p dir="ltr"
+          style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;margin-left: 9px;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Unlock
+            badges in the library catalog by solving which search terms
+            to use. </span>
+      </li>
+    </ol>
+    <br>
+    <ol style="margin-top:0pt;margin-bottom:0pt;margin-left: 9px;" start="3">
+      <li dir="ltr"
+style="list-style-type:decimal;font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">
+        <p dir="ltr"
+          style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;margin-left: 2pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Once
+            you've typed in the correct search term, a badge will pop up
+            next to the correct item in the catalog. If you do not see a
+            badge, keep searching! </span>
+      </li>
+    </ol>
+    <br>
+    <ol style="margin-top:0pt;margin-bottom:0pt;margin-left: 9px;" start="4">
+      <li dir="ltr"
+style="list-style-type:decimal;font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">
+        <p dir="ltr"
+          style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">
+	    Unlocking all the badges finishes the game. When you finish, you will be entered in a drawing to win cool prizes. 
+            </span></p>
+      </li>
+    </ol>
+    <br>
+    <ol style="margin-top:0pt;margin-bottom:0pt;margin-left: 9px;" start="5">
+      <li dir="ltr"
+style="list-style-type:decimal;font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">
+        <p dir="ltr"
+          style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Look
+            for announcement over the summer of a top secret team
+            meeting. </span></p>
+      </li>
+    </ol>
+    <br>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">
+         Further searching tips for the Heroes Quest: </span></p>
+    <br>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">   
+      </span><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Level
+        1: Use our 'search catalog' keyword search to help find the
+        answer. </span></p>
+    <br>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">   
+      </span><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Level
+        2: Try changing search from keyword to author, subject, series,
+        or title. </span></p>
+    <br>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">   
+      </span><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Level
+        3: Try changing the format box to Audio Books, DVD, Music, etc.
+      </span></p>
+    <br>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;
+      "><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Level
+        4: Use the advanced keyword search to find what is available at
+        different library </span></p>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;margin-left:
+      36pt;text-indent: 36pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">
+         locations. </span></p>
+    <br>
+    <p dir="ltr"
+      style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">   
+      </span><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">Level
+        5: Visit </span><a href="http://www.grpl.org/schools"
+        style="text-decoration:none;"><span
+style="font-size:15px;font-family:Arial;color:#1155cc;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:underline;vertical-align:baseline;">www.grpl.org/schools</span></a><span
+style="font-size:15px;font-family:Arial;color:#000000;background-color:transparent;font-weight:normal;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;">
+        to discover databases. </span></p>
+    <br>
+    <br>
+
+
+	   </div> <!-- regWelcome -->
+	
+	   <div id=tab2 style='display:none;'>
+            <div id=badges></div>
+	    <div id=cDetails>Mouse over each challenge for a clue!</div>
+	    <div id=completed></div>
+	   </div> <!-- Challenges -->
+
+	   <div id=tab3 style='display:none;'>
+           <div id=myTeam></div>
+           <div id=teamStatus></div>
+	   </div> <!-- Teams -->
+
+	   <div id=tab4 style='display:none;'>
+	   
+	   </div> <!-- Readers -->
+
+	   </div> <!-- choices -->
+
+	<div id=avatarBuilt style='display:none;'>
+	   <div id=buildPic></div>
+	   <div id=buildName></div>
+	   <div id=buildTeam></div>
+	</div> <!-- avatarBuilt -->
+
+   </div> <!-- registerBox -->
+
+
+</div> <!-- container -->
+
+<input type=hidden name=team id=avTeam>
+
+<form id=stash>
+<input type=hidden id=id name=id value=a>
+<input type=hidden id=stash-team-u name=uid value=[%ctx.user.id%]>
+<input type=hidden id=stash-team-t name=tid>
+</form>
+
+        </div>
+
+
+</div>
+
+<script type="text/javascript">
+   prepareForm();
+</script>
+
+[% END %]
