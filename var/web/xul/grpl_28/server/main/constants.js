@@ -487,6 +487,7 @@ var urls = {
     'XUL_SURVEY_WIZARD' : 'chrome://open_ils_staff_client/content/admin/survey_wizard.xul',
     'XUL_TIMESTAMP_DIALOG' : 'oils://remote/xul/grpl_28/server/util/timestamp.xul',
     'XUL_TOOLBAR_CONFIG' : 'oils://remote/xul/grpl_28/server/admin/toolbar.xul',
+    'XUL_TRIGGER_EVENTS' : '/xul/grpl_28/server/patron/trigger_events.xul',
     'XUL_USER_BUCKETS' : 'oils://remote/xul/grpl_28/server/patron/user_buckets.xul',
     'XUL_VERIFY_CREDENTIALS' : 'oils://remote/xul/grpl_28/server/main/verify_credentials.xul',
     'XUL_VOLUME_BUCKETS' : 'oils://remote/xul/grpl_28/server/cat/volume_buckets.xul',
