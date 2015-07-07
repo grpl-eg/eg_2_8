@@ -22,6 +22,18 @@
    [% DBI.connect(c.dsn,c.usr,c.pw) %]
 [% END %]
 
+                                                            [% srcUsr = 0 %]
+                                                            [%  IF ctx.user;
+                                                                dsetting = "opac.default_list";
+                                                                tclass = (ctx.user_setting_map.$dsetting) ? "temporary" :
+                                                                           (ctx.bookbags.size) ? "temporary divider" : "temporary";
+                                                                 href = mkurl(ctx.opac_root _ '/mylist/add',
+                                                                              {record => rec.id, anchor => 'record_' _ rec.id}, 1);
+                                                                tmp = "opac.src2015";
+                                                                srcUsr = ctx.user_setting_map.$tmp;
+                                                            %]
+							    [% END %]
+
 [% PROCESS "opac/parts/result/paginate.tt2" %] 
 [% ctx.results_count_header = PROCESS results_count_header;
     ctx.results_count_header %]
@@ -108,6 +120,7 @@
         [% hooplaLink = uri.href %]
     [% END %]
 [%- END %]
+
 
                                             <td id='book_jacket' class='result_table_pic_header'>
                                         [% IF hooplaCover == 0 %]
@@ -360,16 +373,6 @@ END;
                                                         </div>
 [% END %]
                                                         <div class="result_aux">
-							    [% srcUsr = 0 %]
-                                                            [%  IF ctx.user;
-                                                                dsetting = "opac.default_list";
-                                                                tclass = (ctx.user_setting_map.$dsetting) ? "temporary" :
-                                                                           (ctx.bookbags.size) ? "temporary divider" : "temporary";
-                                                                 href = mkurl(ctx.opac_root _ '/mylist/add',
-                                                                              {record => rec.id, anchor => 'record_' _ rec.id}, 1);
-							        tmp = "opac.src2015";
-								srcUsr = ctx.user_setting_map.$tmp;	
-                                                            %]
                                                                 <ul class="popmenu">
                                                                     <li><a href="#" class="no-dec">
                                                                           [% l("Add to my list") %]
@@ -406,7 +409,6 @@ END;
                                                                     </li>
                                                                     [%
                                                                        END;
-                                                                       END
                                                                     %]
                                                                     <li>
                                                                         <a href="[% mkurl(ctx.opac_root _ '/myopac/lists',
