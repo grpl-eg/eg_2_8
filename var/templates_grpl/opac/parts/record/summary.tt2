@@ -167,7 +167,7 @@ IF num_uris > 0;
           [% ELSIF (uri.href.match('loc.gov')) %]
                 <a href="[% uri.href %]" target=_blank>[% uri.note %]</a>
           [% ELSIF (uri.href.match('michigan.gov')) %]
-	        <a href="[% uri.href %]" target=_blank>[% uri.note %]</a>
+	        <a href="[% uri.href %]" target=_blank>Click for Online resource</a>
           [% ELSE %]
              <a href="[% uri.href %]">Click for Online Resource</a> 
         [% END %]
@@ -201,7 +201,7 @@ IF num_uris > 0;
 [%- INCLUDE "opac/parts/record/copy_table.tt2" copies=ctx.copies %]
 [%# ELSE %]
 [% END %]
-[% IF format.label == 'Serials and magazines' %]
+[% IF format.label == 'Serials and magazines' && (ctx.have_holdings_to_show || ctx.have_mfhd_to_show) %]
 <div>
 <hr> 
  [% href=mkurl('', {expand => 'issues'}) _ '#issues'; %]
