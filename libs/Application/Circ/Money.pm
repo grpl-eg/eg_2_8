@@ -601,6 +601,34 @@ sub _update_patron_credit {
     $patron->credit_forward_balance($patron->credit_forward_balance + $credit);
     return OpenILS::Event->new('NEGATIVE_PATRON_BALANCE') if $patron->credit_forward_balance < 0;
     $e->update_actor_user($patron) or return $e->die_event;
+
+    if ($credit > 0){
+        my $cbill = "Fieldmapper::money::grocery";
+        $cbill = $cbill->new;
+        $cbill->billing_location(10);
+        $cbill->note("New credit: $credit");
+        $cbill->usr($patron->id);
+        my $tid = $e->create_money_grocery($cbill);
+
+        my $billobj = "Fieldmapper::money::billing";
+        $billobj = $billobj->new;
+        $billobj->amount($credit);
+        $billobj->xact($tid);
+        $billobj->billing_type("Credit Added");
+        $billobj->btype(235);
+        $e->create_money_billing($billobj) or return $e->die_event;
+
+        my $payobj = "Fieldmapper::money::cash_payment";
+        $payobj = $payobj->new;
+        $payobj->amount($credit);
+        $payobj->amount_collected($credit);
+        $payobj->xact($tid);
+        $payobj->note("New credit: $credit");
+        $payobj->accepting_usr($e->requestor->id);
+        $payobj->cash_drawer($e->requestor->wsid);
+        $e->create_money_cash_payment($payobj) or return $e->die_event;
+    }
+
     return undef;
 }
 
