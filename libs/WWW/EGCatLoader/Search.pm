@@ -735,7 +735,7 @@ sub marc_expert_search {
     $self->timelog("Calling get_records_and_facets() for MARC expert");
     my ($facets, @data) = $self->get_records_and_facets(
         $self->ctx->{ids}, undef, {
-            flesh => "{holdings_xml,mra,acnp,acns,cbs}",
+            flesh => "{holdings_xml,mra,acp,acnp,acns,cbs}",
             pref_lib => $self->ctx->{pref_ou},
         }
     );
