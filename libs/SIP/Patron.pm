@@ -181,7 +181,7 @@ sub flesh_user_penalties {
                         where => {
                             '-or' => [
                                 {id => [1,2]}, # fines / overdues
-                                {block_list => {'!=' => undef}}
+                                {block_list => {'~' => 'CIRC'}}
                             ]
                         },
                     }
