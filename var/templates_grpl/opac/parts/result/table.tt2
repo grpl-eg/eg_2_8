@@ -16,11 +16,11 @@
 [%# Dumper.dump_html(ctx) %]
 
 <!-- For SRC data pulls -->
-[% USE DBI %]
-[% USE conn = datafile('/openils/conf/db-connect',delim = '|') %]
-[% FOREACH c = conn %]
-   [% DBI.connect(c.dsn,c.usr,c.pw) %]
-[% END %]
+[%# USE DBI %]
+[%# USE conn = datafile('/openils/conf/db-connect',delim = '|') %]
+[%# FOREACH c = conn %]
+   [%# DBI.connect(c.dsn,c.usr,c.pw) %]
+[%# END %]
 
                                                             [% srcUsr = 0 %]
                                                             [%  IF ctx.user;
@@ -29,8 +29,8 @@
                                                                            (ctx.bookbags.size) ? "temporary divider" : "temporary";
                                                                  href = mkurl(ctx.opac_root _ '/mylist/add',
                                                                               {record => rec.id, anchor => 'record_' _ rec.id}, 1);
-                                                                tmp = "opac.src2015";
-                                                                srcUsr = ctx.user_setting_map.$tmp;
+                                                                #tmp = "opac.src2015";
+                                                                #srcUsr = ctx.user_setting_map.$tmp;
                                                             %]
 							    [% END %]
 
@@ -298,7 +298,7 @@ END;
                                                                                 <a href="[% uri.href %]" target=_blank>Click for Online Resource</a>
                                                                           [% ELSIF ( uri.href.match('bigchalk')) %]
 										[% LABEL %]
-										[% srcUsr = 1 %]
+										[%# srcUsr = 1 %]
                                                                                 <a href="[% uri.href %]" target=_blank>Click for Online Resource</a>
                                                                         [% END %]
 <!-- SRCUSR = [% srcUsr %] -->
@@ -366,7 +366,7 @@ END;
 [% IF !bookKit AND !eReader %]
                                                         <div class="result_aux"><a
                                                                 href="[% mkurl(ctx.opac_root _ '/place_hold',
-                                                                    {hold_target => rec.id, hold_type => 'T', hold_source_page => mkurl()}) %]"
+                                                                    {hold_target => rec.id, hold_type => hold_type, hold_source_page => mkurl()}) %]"
                                                                     name="place_hold_link" class="no-dec"><img class='hide_me'
                                                                 src="[% ctx.media_prefix %]/images/green_check.png"
                                                                 alt=""/><span class="">[% l(' Place Hold') %]</span></a>
@@ -474,8 +474,9 @@ END;
                                                                         <tbody>
 								[% count=0 %]
                                                                 [% FOR copy IN args.holdings %]
-								  [% IF (copy.status != 'Discard/Weed' AND copy.status != 'Lost' 
-									AND copy.status != 'Missing' AND copy.status != 'Staff Review') OR ctx.is_staff %]
+								  [% IF (copy.status != 'Discard/Weed' AND copy.status != 'Lost' AND copy.status != 'Lost and Paid' 
+									AND copy.status != 'Missing' AND copy.status != 'Staff Review') 
+									OR (ctx.is_staff AND !CGI.param('hide_status') ) %]
 								    [% IF count == 5 %]
 									<tr><td colspan=5><a  href="[% mkurl(ctx.opac_root _ '/record/' _ rec.id) %]">More...</a></tr>
 								    [% ELSIF count < 5 %]
