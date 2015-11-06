@@ -517,7 +517,7 @@
                     NEXT IF circlib.getAttribute('opac_visible') == 'false';
 
                     status = copy.findnodes('./*[local-name()="status"]');
-                    #NEXT IF status.getAttribute('opac_visible') == 'false';
+                    NEXT IF (status.getAttribute('opac_visible') == 'false') AND !ctx.is_staff;
 
                     # extract the circ_lib id from the circ_lib node
                     circ_lib = copy.findnodes('./*[local-name()="circ_lib"]');
