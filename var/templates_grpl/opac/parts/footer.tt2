@@ -7,6 +7,8 @@
 <div id=extra_links align=center>
 	<a href='/eg/opac/myopac/purchase_request_form' >Suggest a Title</a>
 	<span> | </span>
+	<a href='http://catalog.kdl.org/' target='_blank' >Search KDL</a>
+	<span> | </span>
         <a href='http://lakenet.llcoop.org/' target='_blank' >Search LakeNet</a>
         <span> | </span>
         <a href='http://elibrary.mel.org/search' target='_blank' >Search MeLCat</a>
