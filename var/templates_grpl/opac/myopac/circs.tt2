@@ -100,7 +100,7 @@ function selectDueSoon() {
                         <td class="checkbox_column" valign="top">
                             <input type="checkbox" name="circ"
                                 title="[% l('Item Selected') %]"
-                                [% IF circ.circ.renewal_remaining < 1 %] disabled="disabled" [% END %]
+                                [% IF circ.circ.renewal_remaining < 1 || (date.format(ctx.parse_datetime(circ.circ.xact_start), '%d-%b-%Y') == date.format(date.now, '%d-%b-%Y'))%] disabled="disabled" [% END %]
                                 value="[% circ.circ.id %]" />
                         </td>
                         <td name="author">
