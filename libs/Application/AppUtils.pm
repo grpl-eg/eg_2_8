@@ -1967,7 +1967,8 @@ sub basic_opac_copy_query {
                     'age_protect', 'holdable', 'copy_number'],
             acpl => [
                 {column => 'name', alias => 'copy_location'},
-                {column => 'holdable', alias => 'location_holdable'}
+                {column => 'holdable', alias => 'location_holdable'},
+		{column => 'label_suffix', alias => 'copy_location_suffix'}
             ],
             ccs => [
                 {column => 'id', alias => 'status_code'},

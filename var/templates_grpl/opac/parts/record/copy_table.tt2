@@ -1,3 +1,21 @@
+[% IF ctx.is_staff %]
+    <script language=javascript>
+    function change_status_hide(bib){
+	var val = 0;
+        var cs = [% copies.size %]
+	if (dojo.byId('hide_status').checked)
+	    val=1;
+	location.replace('/eg/opac/record/'+bib+'?hide_status='+val+';copy_offset=0;copy_limit=100');
+    }
+    </script>
+                    <label class="results_header_lbl" for="hide_status">
+                        <input type="checkbox" id="hide_status" name="hide_status" value=1
+                           [% CGI.param('hide_status') ? ' checked="checked"' : '' %] 
+			   onChange='change_status_hide([% ctx.bre_id %]);' />
+                        Hide Special Statuses
+                    </label>
+   [% ctx.copy_limit = copies.size IF CGI.param('hide_status') %]
+[% END %]
 [%-
 
 # If being used in serial mode, flatten list of units so that they can be
@@ -89,10 +107,15 @@ END; # FOREACH bib
                 callnum = callnum  _ " " _ callnum_suffix;
             END;
         -%]
+
+[% NEXT IF (copy_info.copy_status == 'Lost' OR  copy_info.copy_status == 'Discard/Weed' OR copy_info.copy_status == 'Missing' 
+		OR copy_info.copy_status == 'Staff Review' OR copy_info.copy_status == 'Lost and Paid')
+           AND (CGI.param('hide_status') ) %]
+   
 [% allVolHold = 0 %]
 [% PERL %]
     my $call = $stash->get('callnum');
-    if (($call =~ /\d\sof\s\d/) || ($call =~ /\sv\.\d+(\s|$)/) ){
+    if (($call =~ /\d\sof\s\d/) || ($call =~ /\sv\.\d+(\s|$)/) || ($call =~ /\s\d\d\d\d$/) ){
        $stash->set('allVolHold',1);
     }
 [% END %]
@@ -124,7 +147,15 @@ END; # FOREACH bib
                     '<meta property="gtin13" content="' _ attrs.gtin13 _ '" />';
                 END; -%]
             </td>
-            <td headers='copy_header_shelfloc' property="availableAtOrFrom">[% copy_info.copy_location | html %]</td>
+            <td headers='copy_header_shelfloc' property="availableAtOrFrom">[% copy_info.copy_location | html %]
+             [% IF copy_info.copy_location == 'History and Special Collections' ||
+		copy_info.copy_location == 'Reference' %]
+             (in-house use only)
+             [% END %]
+	     [% IF copy_info.copy_location == 'Storage'%]
+             (see staff)
+             [% END %]
+            </td>
             [%- IF ctx.is_staff %]
             <td headers='copy_header_date_format'>[% date.format(
                 ctx.parse_datetime(copy_info.create_date),

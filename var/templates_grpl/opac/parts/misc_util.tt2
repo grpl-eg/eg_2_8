@@ -536,7 +536,8 @@
                         status => status.textContent,
                         status_code => status.getAttribute('ident'),
                         barcode => copy.getAttribute('barcode'),
-                        owner => volume.getAttribute('lib')
+                        owner => volume.getAttribute('lib'),
+			loc_suffix => loc.getAttribute('suffix')
                     };
                     args.holdings.push(holding);
                     part_label = '';

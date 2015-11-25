@@ -482,7 +482,14 @@ END;
 								    [% ELSIF count < 5 %]
                                                                         <tr style='color:black;'>
                                                                             <td>[% copy.library | html %]</td>
-                                                                            <td>[% copy.location | html %]</td>
+                                                                            <td>[% copy.location | html %]
+                                                                           [% IF copy.location == 'History and Special Collections' || copy.location == 'Reference' %]
+                                                                                (in-house use only)
+                                                                           [% END %]
+									   [% IF copy.location == 'Storage' %]
+										(see staff)
+									   [% END %]
+									    </td>
                                                                             <td><a href='/eg/opac/cnbrowse?cn=[% copy.label %]' class='classic_link'>[% copy.label | html %]</a></td>
                                                                             [%- IF has_parts == 'true'; %]
                                                                             <td>[% copy.part_label %]</td>
