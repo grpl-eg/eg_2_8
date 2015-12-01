@@ -36,7 +36,8 @@
                     var copy = g.network.simple_request( 'FM_ACP_RETRIEVE_VIA_BARCODE.authoritative', [ g.barcodes[i] ] );
                     if (typeof copy.ilsevent != 'undefined') throw(copy);
                     var label_prefix = copy.location().label_prefix() || '';
-                    var label_suffix = copy.location().label_suffix() || '';
+                    //var label_suffix = copy.location().label_suffix() || '';
+		    var label_suffix='';
                     if (!g.volumes[ copy.call_number() ]) {
                         var volume = g.network.simple_request( 'FM_ACN_RETRIEVE.authoritative', [ copy.call_number() ] );
                         if (typeof volume.ilsevent != 'undefined') throw(volume);
