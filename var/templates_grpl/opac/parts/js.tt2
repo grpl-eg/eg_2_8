@@ -1,6 +1,21 @@
 <!-- JS imports, etc.  -->
 <script type="text/javascript" src="[% ctx.media_prefix %]/js/ui/default/opac/simple.js"></script>
 
+<script type="text/javascript">
+function sinkReg(uid) {
+   dojo.xhrGet( {
+        url: "/cgi-bin/utils/public/sink_reg.cgi?id="+uid,
+        handleAs: "text",
+        preventCache: true,
+        load: function(response) {
+           dojo.byId('sink_box').innerHTML='<span>'+response+'</span>';
+        }
+   });
+
+}
+</script>
+
+
 [%- IF ctx.use_stripe %]
 <script type="text/javascript">unHideMe($("pay_fines_now"));[%# the DOM is loaded now, right? %]</script>
 [% END -%]
@@ -54,7 +69,6 @@
      }, lang, bidi;
 </script>
 <script type="text/javascript" src="[% ctx.media_prefix %]/js/dojo/dojo/dojo.js?[% ctx.eg_cache_hash %]"></script>
-<script type="text/javascript" src="[% ctx.media_prefix %]/js/dojo/dojo/openils_dojo.js?[% ctx.eg_cache_hash %]"></script>
 
 [%- # So the following works in Mozilla and Chrome, but not in IE8.
     # Seems like it /should/ work anywhere, though, and obviate the

@@ -5,7 +5,7 @@
     [% IF ctx.is_staff %]
       <a href=/eg/opac/myopac/main style='color: white'>My Account</a>
     [% ELSIF ctx.user %]
-      <a href=/eg/opac/logout>Logout</a>
+      <a href=/eg/opac/logout>[% l('Logout') %]</a>
     [% END %]
     </div>
 

@@ -7,11 +7,10 @@
 %]
 <div class="result_count" style='padding-left: 15px;'>
 [% IF ctx.get_aou(attrs.copy_counts.$depth.org_unit).opac_visible == 't' %]
-    [% l('[_1] of [quant,_2,copy,copies] available at one or more locations.',
-        attrs.copy_counts.$depth.available,
-        attrs.copy_counts.$depth.count,
-        ou_name) | html
-    %]
+    [% l('[_1] ',attrs.copy_counts.$depth.available) %]
+    [% l('of') %]
+    [% l(' [_1] ',attrs.copy_counts.$depth.count) %]
+    [% l('copies available at one or more locations.') %]
 [% END %]
 </div>
 [%-     END; %]

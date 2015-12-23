@@ -65,7 +65,7 @@ function selectDueSoon() {
                     title="[% l('Go') %]"
                     class="opac-button" />
             </span>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="due_soon" onclick="selectDueSoon();"> Select items due within 3 days
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="due_soon" onclick="selectDueSoon();"> [% l('Select items due within 3 days') %]
             <span style="padding-left:5px;" class='hidden'>
                 <a href="#"><img 
                     alt="[% l('Renewing Help') %]"

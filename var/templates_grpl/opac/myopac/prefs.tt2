@@ -56,7 +56,7 @@ function reportLost(){
                     <div style="position:absolute">
                    </div>[% l("Username") %]
                 </td>
-<div id='alias_note' style='color: red; font-family: arial,helvetica; border: solid 1px;float:right;margin-top: 90px;'>
+<div id='alias_note' style='display:none; color: red; font-family: arial,helvetica; border: solid 1px;float:right;margin-top: 90px;'>
  Placing a hold using an alternate hold name is now available.<br/>Please see staff at Customer Service desk or call 616.988.5400.
 </div>
                 <td class='light_border'>[% ctx.user.usrname | html %]</td>
@@ -108,14 +108,14 @@ function reportLost(){
 [% lost = 0 %]
 [% FOR sp IN ctx.user.standing_penalties %]
    [% IF sp.standing_penalty == 113 && !sp.stop_date %]
-        <td class='light_border'><font color=red>Reported Lost</font></td>
+        <td class='light_border'><font color=red>[% l('Reported Lost') %]</font></td>
         <td> </td>
         [% lost = 1 %]
    [% END %]
 [% END %]
 [% IF !lost %]
                 <td class='light_border'>[% ctx.user.card.barcode %]</td>
-                <td class='light_border'><a href='javascript:void();' onClick='reportLost();'>Report Lost</a></td>
+                <td class='light_border'><a href='javascript:void();' onClick='reportLost();'>[% l('Report Lost') %]</a></td>
 [% END %]
             </tr>
 

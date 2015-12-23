@@ -1,5 +1,7 @@
 [% IF !ctx.is_staff %]
 
+[%- INCLUDE "opac/parts/locale_picker.tt2" %]
+
 <link rel="stylesheet" type="text/css" href="/css/deliciousmagazine/style.css" media="screen" />
 <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://www.grpl.org/feed/" />
 <link rel="pingback" href="http://www.grpl.org/xmlrpc.php" />
@@ -84,8 +86,8 @@ h1, h2, h3, h4, h5, h6, .post .title, #slide-nav li a span.info .title, .widget 
 <div id="wrapper">	
 <div style="width: 1000px;">
 	<div id="header" class="col-full">
-		<div id="my_account"><a href='/eg/opac/myopac/main' class='opac-button'>My Account</a></div>
-	        <div id="mobile_search"><a href='/' class='opac-button'>New Search</a></div>
+		<div id="my_account"><a href='/eg/opac/myopac/main' class='opac-button'>[% l('My Account') %]</a></div>
+	        <div id="mobile_search"><a href='/' class='opac-button'>[% l('New Search') %]</a></div>
 		<div id="logo" class="col-left">
 
 					<a href="http://www.grpl.org" title="">
@@ -150,17 +152,10 @@ h1, h2, h3, h4, h5, h6, .post .title, #slide-nav li a span.info .title, .widget 
         <li id="menu-item-30086" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-30086"><a href="http://www.grpl.org/schools/">GRPS Connect</a></li>
 </ul>
 </li>
-<li id="menu-item-25910" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-25910"><a href="http://www.grpl.org/download/">eBooks &#038;<br />Downloads</a>
-<ul class="sub-menu">
-	<li id="menu-item-18516" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-18516"><a href="http://overdrive.grpl.org">Download eBooks &#038; eAudiobooks</a></li>
-	<li id="menu-item-25955" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-25955"><a href="https://www.rbdigital.com/grandrapidsmi/zinio">Download Magazines</a></li>
-	<li id="menu-item-25912" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-25912"><a href="http://ezproxy.grpl.org/login?url=http://www.tumblebooks.com/library/auto_login.asp?U=grandrapids&amp;P=libra">Online Picture Books</a></li>
-	<li id="menu-item-25911" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-25911"><a href="http://ezproxy.grpl.org/login?url=http://infotrac.galegroup.com/itweb/lom_grpl?db=GVRL">Virtual Reference Books</a></li>
-</ul>
-</li>
-<li id="menu-item-18514" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-18514"><a href="/eg/opac">Search <br />Catalog</a></li>
-<li id="menu-item-50" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-50"><a href="/eg/opac/myopac/main"><br/>My Account</a></li>
-</ul>		</div><!-- /#navigation -->
+<li id="menu-item-25910" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-25910"><a href="http://www.grpl.org/download/">eBooks &#038;<br>Downloads</a></li>
+<li id="menu-item-18514" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-18514"><a href="/eg/opac">[% l('Search<br>Catalog') %]</a></li>
+<li id="menu-item-50" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-50"><a href="/eg/opac/myopac/main"><br/>[% l('My Account') %]</a></li>
+		</div><!-- /#navigation -->
 
 	</div><!-- /#header -->
 

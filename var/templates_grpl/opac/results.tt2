@@ -77,6 +77,13 @@
                             [% CGI.param('modifier').grep('available').size ? ' checked="checked"' : '' %] />
                         [% l('Limit to available items') %]
                     </label>
+                 [% IF ctx.is_staff %]
+		    <label class="results_header_lbl" for="hide_status">
+			<input type="checkbox" id="hide_status" name="hide_status" value=1
+			   [% CGI.param('hide_status') ? ' checked="checked"' : '' %] onChange='form.submit()' />
+			Hide Special Statuses
+		    </label>
+                [% END %]
                     [% IF NOT metarecords.disabled %]
                         <label class="results_header_lbl">
                             <input type="checkbox" name="modifier" value="metabib"

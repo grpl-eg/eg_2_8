@@ -16,8 +16,11 @@
                     </label>
    [% ctx.copy_limit = copies.size IF CGI.param('hide_status') %]
 [% END %]
-[%-
 
+[%# USE Dumper(Indent=2) %]
+[%# Dumper.dump_html(ctx) %]
+
+[%-
 # If being used in serial mode, flatten list of units so that they can be
 # used like one long list of copies without changing so much code below.
 IF serial_holdings;
@@ -84,8 +87,8 @@ END;
     </td>
     <td headers='copy_header_callnumber'>[% bib.target_copy.call_number.label | html %]</td>
     <td headers='copy_header_barcode'>[% bib.target_copy.barcode | html %]</td>
-    <td headers='copy_header_shelfloc'>[% copy_info.copy_location | html %]</td>
-    <td headers='copy_header_status'>[% copy_info.copy_status | html %]</td>
+    <td headers='copy_header_shelfloc'>[% l(copy_info.copy_location) | html %]</td>
+    <td headers='copy_header_status'>[% l(copy_info.copy_status) | html %]</td>
     <td headers='copy_header_due_date'>[% copy_info.due_date | html %]</td>
 </tr>
 
@@ -147,15 +150,7 @@ END; # FOREACH bib
                     '<meta property="gtin13" content="' _ attrs.gtin13 _ '" />';
                 END; -%]
             </td>
-            <td headers='copy_header_shelfloc' property="availableAtOrFrom">[% copy_info.copy_location | html %]
-             [% IF copy_info.copy_location == 'History and Special Collections' ||
-		copy_info.copy_location == 'Reference' %]
-             (in-house use only)
-             [% END %]
-	     [% IF copy_info.copy_location == 'Storage'%]
-             (see staff)
-             [% END %]
-            </td>
+            <td headers='copy_header_shelfloc' property="availableAtOrFrom">[% l(copy_info.copy_location) | html %] [% copy_info.copy_location_suffix %]</td>
             [%- IF ctx.is_staff %]
             <td headers='copy_header_date_format'>[% date.format(
                 ctx.parse_datetime(copy_info.create_date),
@@ -213,7 +208,7 @@ END; # FOREACH bib
             [%- END %]
             <td headers='copy_header_status'>[%-
                 schema_copy_status.${copy_info.status_code};
-                copy_info.copy_status | html;
+                l(copy_info.copy_status) | html;
             -%]</td>
             <td headers='copy_header_due_date'>[%
                 IF copy_info.due_date;

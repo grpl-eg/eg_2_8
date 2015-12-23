@@ -1,0 +1,63 @@
+[% BLOCK results_count_header %]
+<div class="results_header_nav1">
+    <span class="h1">[% ctx.bookbag ? l('List Contents') : l('Search Results') %]</span>
+    <span class="result_number">
+                [%~ |l('<span class="result_count_number">' _ ctx.result_start _'</span>',
+                '<span class="result_count_number">' _ ctx.result_stop _ '</span>',
+                '<span class="result_count_number">' _ ctx.hit_count _ '</span>')  ~%]
+                [% l('Results') %] [_1] - [_2] [% l('of about') %] [_3]
+                [%~ END %]
+                <span style='padding-left: 6px;'>
+                    [%~ |l('<span class="result_count_number">' _ (page + 1) _ '</span>',
+                    '<span class="result_count_number">' _ page_count _ '</span>') ~%]
+                    ([% l('page') %] [_1] [% l('of') %] [_2])
+                    [%~ END %]
+                </span>
+    </span>
+    [%- INCLUDE "opac/parts/pref_lib_display.tt2" %]
+    <span>
+                <span class='start_end_links_span'>
+
+                    [%- class = 'search_page_nav_link';
+                        href = '#';
+                        IF page > 0;
+                            href = mkurl('', {page => page - 1});
+                    -%]
+                    <a class='[% class %]' href='[% href %]' 
+                        title='[% l("Previous page") %]' rel="nofollow" vocab=""><span class="nav_arrow_fix">&#9668;</span> [% l('Previous') %] </a>
+                    [%- END;
+
+                        # show links to 4 previous pages, the current page, and 3 more pages.
+                        added = 0;
+                        pageitr = page - 5; 
+                        IF page_count > 1; # no need to paginate 1 page
+                    -%]
+                    <span class='results-paginator-list'>
+                    [%-
+                                WHILE (pageitr = pageitr + 1) < page_count;
+                                    IF pageitr < 0; NEXT; END;
+                                    IF pageitr == page; %]
+                                        <span class='results-paginator-selected'>[% pageitr + 1%]</span>
+                                    [% ELSE %]
+                                        <a href="[% mkurl('', {page => pageitr}) %]" rel="nofollow" vocab="">[% pageitr + 1%]</a>
+                                [%  END;
+                                    added = added + 1;
+                                    IF added == 8; LAST; END;
+                                END;
+                    -%]
+                    </span>
+                    [%- END;
+
+                        class = 'search_page_nav_link';
+                        href = '#';
+                        IF (page + 1) < page_count;
+                            href = mkurl('', {page => page + 1});
+                    -%]
+                    <a class='[% class %]' href='[% href %]' 
+                        title='[% l("Next page") %]' rel="nofollow" vocab=""> [% l('Next') %] <span class="nav_arrow_fix">&#9658;</span></a>
+                    [%- END; -%]
+                </span>
+    </span>
+</div>
+[% END %]
+

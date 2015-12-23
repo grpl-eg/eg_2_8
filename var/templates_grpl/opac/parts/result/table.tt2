@@ -254,7 +254,7 @@ END;
                                                             <img title="[% format.label | html %]"
                                                                 alt="[% format.label | html %]"
                                                                 src="[% format.icon %]" />
-                                                            [% format.label | html %]
+                                                            [% l(format.label) | html %]
                                                         [% END %]
                                                     [%- END %]
 
@@ -279,7 +279,7 @@ END;
                                                         [%# FOR uri IN args.uris %]
 							[% FOR uri IN merged_uris %]
 							   
-                                                          [% LABEL = l('  <tr name=bib_uri_list class=result_table_title_cell><td valign=top><strong>Electronic resource</strong></td><td>') %]
+                                                          [% LABEL = l('  <tr name=bib_uri_list class=result_table_title_cell><td valign=top><strong>[_1]</strong></td><td>',l('Electronic resource') ) %]
                                                                         [%- IF uri.note == 'Finding aid online:' %]
                                                                                 [% LABEL %]
 										 <a href="[% uri.href %]" target=_blank>Archival [% uri.note %]</a>
@@ -289,17 +289,17 @@ END;
                                                                                 <a href="[% uri.href %]" target=_blank>Download From Overdrive</a>
                                                                           [% ELSIF (uri.href.match('contentdm')) %]
                                                                                 [% LABEL %]
-                                                                                <a href="[% uri.href %]" target=_blank>Click for Archive Photograph</a>
+                                                                                <a href="[% uri.href %]" target=_blank>[% l('Click for Archive Photograph') %]</a>
 									  [% ELSIF (uri.href.match('galegroup')) %]
                                                                                 [% LABEL %]
 										<a href="[% uri.href %]" target=_blank>View online in Gale Virtual Reference</a>
 									  [% ELSIF (uri.href.match('michigan.gov')) %]
 										[% LABEL %]
-                                                                                <a href="[% uri.href %]" target=_blank>Click for Online Resource</a>
+                                                                                <a href="[% uri.href %]" target=_blank>[% l('Click for Online Resource') %]</a>
                                                                           [% ELSIF ( uri.href.match('bigchalk')) %]
 										[% LABEL %]
 										[%# srcUsr = 1 %]
-                                                                                <a href="[% uri.href %]" target=_blank>Click for Online Resource</a>
+                                                                                <a href="[% uri.href %]" target=_blank>[% l('Click for Online Resource') %]</a>
                                                                         [% END %]
 <!-- SRCUSR = [% srcUsr %] -->
 [% IF srcUsr == 1 %]
@@ -450,6 +450,18 @@ END;
    [%END%]
 [%END%]
 [%END%]
+                                                    <div id=sinkListAdd>
+                                                                [%
+                                                                       FOREACH bag IN ctx.bookbags;
+                                                                           href = mkurl(ctx.opac_root _ '/myopac/list/update',
+                                                                                    {action => 'add_rec', list => bag.id, record => rec.id,
+                                                                                     anchor => 'record_' _ rec.id}, 1);
+                                                                %]
+                                                                   [% IF bag.name == 'WRC2015' %]
+                                                                    <a href="[% href %]" onclick='style="opacity:.3";'><img src=/opac/images/wrc-listlink.jpg></a>
+                                                                [% END; END %]
+                                                        </div>
+
 						</div>
                                             </td>
                                         </tr>
@@ -482,19 +494,13 @@ END;
 								    [% ELSIF count < 5 %]
                                                                         <tr style='color:black;'>
                                                                             <td>[% copy.library | html %]</td>
-                                                                            <td>[% copy.location | html %]
-                                                                           [% IF copy.location == 'History and Special Collections' || copy.location == 'Reference' %]
-                                                                                (in-house use only)
-                                                                           [% END %]
-									   [% IF copy.location == 'Storage' %]
-										(see staff)
-									   [% END %]
+                                                                            <td>[% l(copy.location) | html %] [% l(copy.loc_suffix) %]
 									    </td>
                                                                             <td><a href='/eg/opac/cnbrowse?cn=[% copy.label %]' class='classic_link'>[% copy.label | html %]</a></td>
                                                                             [%- IF has_parts == 'true'; %]
                                                                             <td>[% copy.part_label %]</td>
                                                                             [%- END %]
-                                                                            <td>[% copy.status | html %]</td>
+                                                                            <td>[% l(copy.status) %]</td>
                                                                         </tr>
 								    [% END %]
 								   [% count=count+1 %]

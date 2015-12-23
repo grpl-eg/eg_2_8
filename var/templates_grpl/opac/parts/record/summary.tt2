@@ -68,7 +68,7 @@
       <img title="[% format.label | html %]" 
 	  alt="[% format.label | html %]" 
 	  src="[% format.icon %]" /> 
-      [% format.label | html %]
+      [% l(format.label) | html %]
   [% END %]
 [%- END %]
 <div id="rdetail_actions_div">
@@ -106,6 +106,17 @@
                 <a href="[% mkurl(ctx.opac_root _ '/record/print/' _ ctx.bre_id) %]" class="no-dec">[% l('Print') %]</a> /
                 <a href="[% mkurl(ctx.opac_root _ '/record/email/' _ ctx.bre_id) %]" class="no-dec">[% l('Email') %]</a>
             </div>
+        <div id=sinkListAdd>
+            [%
+               FOREACH bag IN ctx.bookbags;
+                   href = mkurl(ctx.opac_root _ '/myopac/list/update',
+                                {action => 'add_rec', list => bag.id, record => ctx.bre_id,
+                                 anchor => ctx.bre_id}, stop_parms);
+            %]
+            [% IF bag.name == 'WRC2015' %]
+                 <a href="[% href %]" onclick='style="opacity:.3";'><img src=/opac/images/wrc-listlink.jpg></a>
+            [% END; END %]
+        </div>
             [%- IF ctx.refworks.enabled == 'true' %]
                 [%- INCLUDE 'opac/parts/record/refworks.tt2' %]
             [%- END %]
@@ -159,7 +170,7 @@ IF num_uris > 0;
           [% ELSIF (uri.href.match('overdrive')) %]
                 <a href="[% uri.href %]" target=_blank>Download From Overdrive</a>
           [% ELSIF (uri.href.match('contentdm')) %]
-                <a href="[% uri.href %]" target=_blank>Click for Archive Photograph</a>
+                <a href="[% uri.href %]" target=_blank>[% l('Click for Archive Photograph') %]</a>
           [% ELSIF (uri.href.match('galegroup')) %]
                 <a href="[% uri.href %]" target=_blank>View online in Gale Virtual Reference</a>
           [% ELSIF (uri.href.match('hoopladigital')) %]
@@ -167,9 +178,9 @@ IF num_uris > 0;
           [% ELSIF (uri.href.match('loc.gov')) %]
                 <a href="[% uri.href %]" target=_blank>[% uri.note %]</a>
           [% ELSIF (uri.href.match('michigan.gov')) %]
-	        <a href="[% uri.href %]" target=_blank>Click for Online resource</a>
+	        <a href="[% uri.href %]" target=_blank>[% l('Click for Online resource') %]</a>
           [% ELSE %]
-             <a href="[% uri.href %]">Click for Online Resource</a> 
+             <a href="[% uri.href %]">[% l('Click for Online Resource') %]</a> 
         [% END %]
 
         [%- IF num_uris == 1 %]</p>[% ELSE %]</li>[% END %]
@@ -192,8 +203,10 @@ IF num_uris > 0;
             [%- ELSIF eReader %]
                 eReader (NOOK) must be checked out from and returned to GRPL Reference Desk.
             [%- ELSE %]
-                [%- l("[quant,_1,current hold,current holds] with [quant,_2,total copy,total copies].",
-                        ctx.record_hold_count, ctx.copy_summary.0.count) %]
+                [%- ctx.record_hold_count %]
+		[% l(' current holds with ') %]
+		[% ctx.copy_summary.0.count %]
+		[% l(' total copies') %]
             [%- END %]
         </ul>
     </span>

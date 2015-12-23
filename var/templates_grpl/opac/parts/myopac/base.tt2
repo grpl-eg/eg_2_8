@@ -7,7 +7,7 @@
         {url => "prefs", name => l("Account Preferences")},
         {url => "lists", name => l("My Lists")},
 	{url => "purchase_request_form", name => l("Suggest a Title")}
-	{url => "src", name=> l("Summer Reading")}
+	#{url => "src", name=> l("Summer Reading")}
     ];
     skin_root = "../"
 %]

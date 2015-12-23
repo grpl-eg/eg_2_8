@@ -1622,10 +1622,10 @@ a.preflib_change {
 }
     
 #locale_picker_form {
-    float: right;
+    position: absolute;
+    right: 10px; 
     padding: 0.5em;
     margin-top: 2em;
-    border-right: thin [% css_colors.control %] solid;
 }
 
 #locale_picker_form * {
@@ -1894,7 +1894,7 @@ a.preflib_change {
         display:none;
     }
     #myopac_sum_fines {
-        display: none;
+        display: block;
     }
     .results_header_lbl {
         display: none;
@@ -2158,4 +2158,27 @@ See also http://webaim.org/techniques/css/invisiblecontent/
 } 
 
 #srcReturn { position: fixed; top:150px; right:140px; }
+
+#sink_box {
+    position: absolute;
+    color: white;
+    font-weight: bold;
+    cursor: pointer !important;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    margin: 0.5em;
+    padding: 0.3em;
+    margin-top: -3px;
+    margin-left: 520px;
+    margin-bottom: 15px;
+    background-color: #06357a;
+}
+
+#sink_box a {padding-left: 5px; padding-top: 5px; position: absolute;}
+
+
+#sinkListAdd {
+    margin-top: 10px;
+}
 

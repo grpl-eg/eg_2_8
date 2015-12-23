@@ -38,17 +38,17 @@ function validate_form(){
     <br/>
 
     <div style="margin-left: 20px;padding-bottom: 20px;">
-        <li><strong>Each patron is limited to 15 suggestions per year.</strong></li>
-	<li><strong>Email is the only method of notification. We will only notify you if we do not purchase the item.</strong></li>
+        <li><strong>[% l('Each patron is limited to 15 suggestions per year.') %]</strong></li>
+	<li><strong>[% l('Email is the only method of notification. We will only notify you if we do not purchase the item.') %]</strong></li>
     </div>
 
 
     <div align='right'>
-	Current Request Count : [% ctx.purchase_request.count | html %]
+	[% l('Current Request Count') %] : [% ctx.purchase_request.count | html %]
     </div>
     [% IF ctx.purchase_request.success == 0 %]
 	<div>
-		<font color=red>Requests are limited to 15 per year.  You have now reached your limit.</font> <br/>
+		<font color=red>[% l('Requests are limited to 15 per year.  You have now reached your limit.') %]</font> <br/>
 	</div>
     [% END %]
 <form method='POST' id='request_form' onsubmit="return validate_form();">
