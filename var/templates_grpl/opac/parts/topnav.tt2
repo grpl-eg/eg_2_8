@@ -88,6 +88,9 @@ h1, h2, h3, h4, h5, h6, .post .title, #slide-nav li a span.info .title, .widget 
 	<div id="header" class="col-full">
 		<div id="my_account"><a href='/eg/opac/myopac/main' class='opac-button'>[% l('My Account') %]</a></div>
 	        <div id="mobile_search"><a href='/' class='opac-button'>[% l('New Search') %]</a></div>
+	     [% IF ctx.user %]
+		<div id="mobile_logout"><a href='/eg/opac/logout' class='opac-button'>[% l('Logout') %]</a></div>
+	     [% END %]
 		<div id="logo" class="col-left">
 
 					<a href="http://www.grpl.org" title="">

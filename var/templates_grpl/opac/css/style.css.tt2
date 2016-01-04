@@ -35,6 +35,7 @@ button, input {
     color: #f38f1d;
 }
 
+#mobile_logout { display:none;}
 
 img {
     border: none;
@@ -1803,6 +1804,9 @@ a.preflib_change {
     .mobile_title { display: block; }
     .long_title {display: none; }
     .record_long_title {display: none; }
+
+    #mobile_logout {display:block; margin-left: 280px; width: 150px;}
+    #mobile_logout a {color:white;}
 
     select#qtype {
 	margin-left: 20px;
