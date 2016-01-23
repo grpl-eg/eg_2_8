@@ -336,7 +336,20 @@ END;
                                                         [% END %]
                                                     [%- END %]
 </div>
+
 [% IF attrs.copy_counts.0.count == 0 %]
+
+                                                    <div id=sinkListAdd style='float:right;'>
+                                                                [%
+                                                                       FOREACH bag IN ctx.bookbags;
+                                                                           href = mkurl(ctx.opac_root _ '/myopac/list/update',
+                                                                                    {action => 'add_rec', list => bag.id, record => rec.id,
+                                                                                     anchor => 'record_' _ rec.id}, 1);
+                                                                %]
+                                                                   [% IF bag.name == 'WRC2015' %]
+                                                                    <a href="[% href %]" onclick='style="opacity:.3";'><img src=/opac/images/wrc-listlink.jpg></a>
+                                                                [% END; END %]
+                                                    </div>
 </table>
 [% END %]
                                                             [%- IF args.holdings.size > 0 OR attrs.copy_counts.0.count > 0;
@@ -494,7 +507,7 @@ END;
 								    [% ELSIF count < 5 %]
                                                                         <tr style='color:black;'>
                                                                             <td>[% copy.library | html %]</td>
-                                                                            <td>[% l(copy.location) | html %] [% l(copy.loc_suffix) %]
+                                                                            <td>[% l(copy.location) %] [% IF copy.loc_suffix %] [% l(copy.loc_suffix) %] [% END %]
 									    </td>
                                                                             <td><a href='/eg/opac/cnbrowse?cn=[% copy.label %]' class='classic_link'>[% copy.label | html %]</a></td>
                                                                             [%- IF has_parts == 'true'; %]
