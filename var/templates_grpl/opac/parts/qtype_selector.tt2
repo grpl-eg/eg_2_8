@@ -1,6 +1,7 @@
 [%  query_types = [
     {value => "keyword", label => l("Keyword")},
     {value => "title", label => l("Title"), plural_label => l("Titles"), browse => 1},
+    {value => "jtitle", label => l("Journal Title")},
     {value => "author", label => l("Author"), plural_label => l("Authors"), browse => 1},
     {value => "subject", label => l("Subject"), plural_label => l("Subjects"), browse => 1},
     {value => "series", label => l("Series"), plural_label => l("Series"), browse => 1},
