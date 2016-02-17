@@ -188,7 +188,8 @@ cat.util.transfer_copies = function(params) {
 
         for (var i = 0; i < copies.length; i++) {
             copies[i].call_number( data.marked_volume );
-            copies[i].circ_lib( params.owning_lib );
+            if (copies[i].floating() != 1)
+                copies[i].circ_lib( params.owning_lib );
             copies[i].ischanged( 1 );
         }
 
