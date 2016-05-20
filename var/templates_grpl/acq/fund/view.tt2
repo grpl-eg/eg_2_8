@@ -216,9 +216,9 @@
                         autoHeight='true'
                         dojoType="openils.widget.AutoGrid"
                         fieldOrder="['amount', 'encumbrance', 'debit_type', 'origin_amount', 'origin_currency_type']"
-                        suppressFields="['id', 'fund']"
+                        suppressFields="['id', 'fund', 'poid']"
                         defaultCellWidth='"auto"'
-                        fmClass="acqfdeb"
+                        fmClass="acqfdebx"
                         query="{id: '*'}"
                         showPaginator='true'>
                     </table>
