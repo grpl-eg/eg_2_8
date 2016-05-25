@@ -24,4 +24,5 @@ function load() {
     );
 }
 
+
 openils.Util.addOnLoad(load);
