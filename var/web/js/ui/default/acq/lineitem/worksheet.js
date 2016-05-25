@@ -24,5 +24,21 @@ function load() {
     );
 }
 
+function print_node(node_id) {
+    var iframe = document.createElement("iframe");
+    var source_node = dojo.byId(node_id);
+    source_node.parentNode.appendChild(iframe);
+
+    var iwin = iframe.contentWindow;
+
+    iwin.document.close();
+
+    iwin.document.body.innerHTML = source_node.innerHTML;
+    iframe.focus();
+
+    try { iframe.print(); } catch (e) { iwin.print(); }
+    setTimeout(function() { iframe.style.display = "none"; }, 3500);
+}
+
 
 openils.Util.addOnLoad(load);

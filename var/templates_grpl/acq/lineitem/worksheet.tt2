@@ -11,6 +11,7 @@
 <h1>[% l('Lineitem Worksheet') %]</h1>
 <div dojoType='dijit.form.Button' scrollOnFocus='false' onClick='location.href = returnRef'>[% l('&#x2196; Return') %]</div>
 <br/><br/>
+<button onclick="print_node('acq-worksheet-contents');">Print</button>
 <div id="acq-worksheet-contents"></div>
 <div class='hidden'>
     <div jsId='progressDialog' dojoType='openils.widget.ProgressDialog' message='[% l('Loading Worksheet...') %]'></div>
