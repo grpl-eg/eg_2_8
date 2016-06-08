@@ -821,6 +821,9 @@ function addInvoiceEntry(entry) {
             entry.lineitem(li);
             entry.purchase_order(li.purchase_order());
             nodeByName('title_details', row).innerHTML = html;
+ 
+	    nodeByName('title_details', row).innerHTML += '<a href='+oilsBasePath + "/acq/lineitem/worksheet/" + li.id() +'>worksheet</a>';
+            	    
 
             nodeByName('title_details', row).parentNode.id = 'li-title-ref-' + li.id();
             console.log(dojo.byId('li-title-ref-' + li.id()));
