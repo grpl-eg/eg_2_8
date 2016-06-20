@@ -2393,6 +2393,9 @@ function AcqLiTable() {
                         if (field == "fund" && w.store)
                             self._ensureCSSFundClasses(w.store);
 
+			if (field == "owning_lib" && !copy.owning_lib())
+			    copy.ischanged(true);
+
                         if(!readOnly) 
                             copy[field](ww.getFormattedValue()) 
 
