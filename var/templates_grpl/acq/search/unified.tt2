@@ -101,7 +101,7 @@
             query="{id: '*'}"
             fieldOrder="['name', 'owner', 'ordering_agency', 'provider',
                 'create_time', 'edit_time', 'state']"
-            suppressFields="['owner', 'editor', 'creator']"
+            suppressFields="['owner', 'editor']"
             defaultCellWidth="'auto'"
             showPaginator="true"
             fmClass="acqpo">
