@@ -312,6 +312,7 @@ function renderPo() {
         PO.provider()
     );
     dojo.byId("acq-po-view-total-li").innerHTML = PO.lineitem_count();
+    dojo.byId("acq-po-view-total-copies").innerHTML = PO.copy_count();
     dojo.byId("acq-po-view-total-enc").innerHTML = PO.amount_encumbered().toFixed(2);
     dojo.byId("acq-po-view-total-spent").innerHTML = PO.amount_spent().toFixed(2);
     dojo.byId("acq-po-view-state").innerHTML = po_state; // TODO i18n

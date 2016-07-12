@@ -968,6 +968,8 @@ sub retrieve_purchase_order_impl {
 
         my $items = $e->search_acq_lineitem({purchase_order => $po_id}, {idlist=>1});
         $po->lineitem_count(scalar(@$items));
+	my $count = $e->json_query({ from => ['acq.po_total_copies', $po_id] })->[0];
+        $po->copy_count($count->{'acq.po_total_copies'});
     }
 
     if($$options{flesh_price_summary}) {
