@@ -45,7 +45,12 @@ function _drawForm(r) {
     for(var name in sources) {
         source = sources[name];
         if(name == 'native-evergreen-catalog') continue;
-        bibSourceSelect.addOption({value:name, label:source.label});
+        if (name.match("ohiolink|MeLCat|milwaukee|oclc|loc|michiganstate")) {
+	    bibSourceSelect.addOption({value:name, label:source.label, selected:true});
+	 }else{
+            bibSourceSelect.addOption({value:name, label:source.label});
+	}
+    
         for(var attr in source.attrs) 
             if(!attr.match(/^#/)) // xml comment nodes
                 searchFields.push(source.attrs[attr]);
