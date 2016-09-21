@@ -84,6 +84,8 @@
                     -%]
                         <tr class="result_table_row">
 
+[%# Dumper.dump_html(attrs) %]
+
 [%- bookKit = 0 %]
 [%- eReader = 0 %]
 [%- PERL %]
@@ -338,7 +340,7 @@ END;
 </div>
 
 [% IF attrs.copy_counts.0.count == 0 %]
-
+<!-- # remove comment tags for WRC
                                                     <div id=sinkListAdd style='float:right;'>
                                                                 [%
                                                                        FOREACH bag IN ctx.bookbags;
@@ -350,6 +352,7 @@ END;
                                                                     <a href="[% href %]" onclick='style="opacity:.3";'><img src=/opac/images/wrc-listlink.jpg></a>
                                                                 [% END; END %]
                                                     </div>
+-->
 </table>
 [% END %]
                                                             [%- IF args.holdings.size > 0 OR attrs.copy_counts.0.count > 0;
@@ -463,6 +466,7 @@ END;
    [%END%]
 [%END%]
 [%END%]
+<!-- # remove comment tags for WRC
                                                     <div id=sinkListAdd>
                                                                 [%
                                                                        FOREACH bag IN ctx.bookbags;
@@ -473,7 +477,8 @@ END;
                                                                    [% IF bag.name == 'WRC2015' %]
                                                                     <a href="[% href %]" onclick='style="opacity:.3";'><img src=/opac/images/wrc-listlink.jpg></a>
                                                                 [% END; END %]
-                                                        </div>
+                                                    </div>
+-->
 
 						</div>
                                             </td>
@@ -498,12 +503,14 @@ END;
                                                                         </tr>
                                                                         <tbody>
 								[% count=0 %]
+								[% more=0 %]
                                                                 [% FOR copy IN args.holdings %]
 								  [% IF (copy.status != 'Discard/Weed' AND copy.status != 'Lost' AND copy.status != 'Lost and Paid' 
 									AND copy.status != 'Missing' AND copy.status != 'Staff Review') 
 									OR (ctx.is_staff AND !CGI.param('hide_status') ) %]
 								    [% IF count == 5 %]
 									<tr><td colspan=5><a  href="[% mkurl(ctx.opac_root _ '/record/' _ rec.id) %]">More...</a></tr>
+									[%more=1%]
 								    [% ELSIF count < 5 %]
                                                                         <tr style='color:black;'>
                                                                             <td>[% copy.library | html %]</td>
@@ -519,6 +526,9 @@ END;
 								   [% count=count+1 %]
 								  [% END %]
                                                                 [% END %]
+								[% IF attrs.copy_counts.0.count > 5 AND more == 0 %]
+									<td colspan=5><a  href="[% mkurl(ctx.opac_root _ '/record/' _ rec.id) %]">More...</a></tr>
+								[% END %]
 [% FOREACH peer IN ctx.foreign_copies %]
 [% FOREACH bib IN  peer.0.foreign_copy_maps %]
 [% IF bib.peer_record == rec.id %]
