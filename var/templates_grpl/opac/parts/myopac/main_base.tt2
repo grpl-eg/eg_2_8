@@ -5,8 +5,11 @@
 
 <div id='myopac_summary_div' style="padding:0px;">
 
+<!-- # remove comment tags for WRC & SRC
 <div id=sink_box style=''><img src=/opac/images/wrc-signup.jpg onClick=sinkReg([% ctx.user.id %]);><br><a href=http://www.grpl.org/winterreading/ target=_blank>Learn More</a></div>
 
+<div id=src_box><a href=http://www.grpl.org/summerreading/ target=_blank><img src=/images/src.png width=200px ><br>Learn More</a></div>
+-->
     <div style="float:left;">
         <div class="header_middle">[% l('Account Summary') %]</div>
     </div>
@@ -30,6 +33,10 @@
             <input type="submit" title="[% l('Pay Fines') %]"
             value="[% l('Pay Fines') %]" class="pos-rel-top-5 opac-button" /></form>
         [%# END %]
+	<br><br>
+        [% IF (ctx.user.credit_forward_balance > 0) %]
+		[% l('Credit available:') %] [% money(ctx.user.credit_forward_balance) %]
+	[% END %]
     </div>
     [%# END %]
 
